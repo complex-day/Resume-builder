@@ -1,0 +1,183 @@
+{
+  "version": "1.0",
+  "updated_at": "2026-11-19T10:00:00Z",
+  "basics": {
+    "full_name": "Aarav Sharma",
+    "email": "aarav.sharma@example.com",
+    "phone": "+91-9876543210",
+    "location": "Bengaluru, Karnataka, India",
+    "linkedin_url": "https://linkedin.com/in/aarav-sharma-cs",
+    "github_username": "aaravsharma-dev",
+    "portfolio_url": "https://aaravsharma.dev",
+    "summary": "Computer Science undergraduate with practical experience in distributed backend systems, REST APIs, and modern cloud deployment pipelines."
+  },
+  "education": [
+    {
+      "institution": "Vellore Institute of Technology (VIT), Vellore",
+      "degree": "Bachelor of Technology (B.Tech)",
+      "field_of_study": "Computer Science and Engineering",
+      "start_date": "2021-08",
+      "end_date": "2025-05",
+      "cgpa_or_percentage": 8.85,
+      "graduation_year": 2025
+    }
+  ],
+  "experience": [
+    {
+      "company": "Razorpay",
+      "role": "Software Engineering Intern",
+      "location": "Bengaluru, India",
+      "start_date": "2024-05",
+      "end_date": "2024-07",
+      "is_current": false,
+      "highlights": [
+        "Engineered idempotency middleware in Go for merchant webhook dispatches, processing 25,000+ daily events.",
+        "Reduced duplicate event retries by 42% through distributed Redis lock keying.",
+        "Collaborated with the core payments team to write unit and contract tests achieving 94% test coverage."
+      ],
+      "tech_stack": [
+        "Go",
+        "Redis",
+        "PostgreSQL",
+        "Docker",
+        "Kafka"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "id": "indic-doc-chat",
+      "name": "IndicDoc - Multilingual RAG Document Assistant",
+      "tagline": "Retrieval-augmented Q&A pipeline over vernacular enterprise documents in 8 Indian languages",
+      "description": "Developed a multilingual document question-answering platform that indexes enterprise PDFs and answers queries in Hindi, Tamil, Telugu, and Kannada with source citation.",
+      "highlights": [
+        "Implemented hybrid vector search combining BM25 and multilingual embeddings using ChromaDB.",
+        "Integrated Sarvam AI and Gemini models to handle low-resource Indian language queries accurately.",
+        "Optimized chunking and reranking pipeline, cutting hallucinated citations by 38%."
+      ],
+      "tech_stack": [
+        "Python",
+        "FastAPI",
+        "LangChain",
+        "ChromaDB",
+        "Gemini API",
+        "React"
+      ],
+      "repo_url": "https://github.com/aaravsharma-dev/indic-doc-chat",
+      "live_url": "https://indic-doc-chat.vercel.app",
+      "metrics": [
+        "Indexed 1,200+ multi-page policy PDFs",
+        "Sub-850ms average retrieval latency",
+        "Supports 8 scheduled Indian languages"
+      ]
+    },
+    {
+      "id": "distributed-task-queue",
+      "name": "ChronoQueue - Distributed Fault-Tolerant Task Orchestrator",
+      "tagline": "Lightweight distributed job queue in Go with exponential backoff and dead-letter queues",
+      "description": "Architected a high-throughput distributed task scheduler designed to manage asynchronous background jobs across multiple worker nodes with guaranteed at-least-once delivery.",
+      "highlights": [
+        "Designed raft-based leader election and persistent write-ahead logging (WAL) for task state durability.",
+        "Built worker node heartbeat health checks and automated failover recovery mechanisms.",
+        "Constructed a real-time monitoring dashboard using WebSockets and Prometheus metrics."
+      ],
+      "tech_stack": [
+        "Go",
+        "gRPC",
+        "Protobuf",
+        "Redis",
+        "Docker",
+        "Prometheus"
+      ],
+      "repo_url": "https://github.com/aaravsharma-dev/chrono-queue",
+      "live_url": "https://chrono-queue.demo.aaravsharma.dev",
+      "metrics": [
+        "Processes 15,000+ jobs/sec on a 3-node cluster",
+        "Zero data loss under abrupt worker shutdown",
+        "45% lower memory footprint than Celery"
+      ]
+    },
+    {
+      "id": "upi-fraud-detector",
+      "name": "SafePay - Real-Time UPI Transaction Anomaly Detector",
+      "tagline": "Sub-50ms fraud scoring engine analyzing transaction patterns and device telemetry",
+      "description": "Engineered an anomaly detection microservice evaluating streaming UPI payments against velocity rules and behavioral risk models to prevent unauthorized transfers.",
+      "highlights": [
+        "Developed sliding-window event aggregation using Redis Streams and Python.",
+        "Trained an isolation forest classifier on synthetic transactional patterns detecting geographic jumps.",
+        "Exposed gRPC and REST endpoints with automated token verification and rate limiting."
+      ],
+      "tech_stack": [
+        "Python",
+        "FastAPI",
+        "scikit-learn",
+        "Redis Streams",
+        "PostgreSQL",
+        "Grafana"
+      ],
+      "repo_url": "https://github.com/aaravsharma-dev/safepay-upi-detector",
+      "live_url": "https://safepay-detector.fly.dev",
+      "metrics": [
+        "Evaluates fraud risk score in <42ms",
+        "96.4% recall on simulated transaction anomalies",
+        "Handles burst rates of 4,000 req/sec"
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "category_name": "Languages",
+      "skills": [
+        "Python",
+        "Go",
+        "TypeScript",
+        "SQL",
+        "C++"
+      ]
+    },
+    {
+      "category_name": "Frameworks & Libraries",
+      "skills": [
+        "FastAPI",
+        "React",
+        "Next.js",
+        "LangChain",
+        "Node.js"
+      ]
+    },
+    {
+      "category_name": "Databases & Caching",
+      "skills": [
+        "PostgreSQL",
+        "Redis",
+        "ChromaDB",
+        "MongoDB"
+      ]
+    },
+    {
+      "category_name": "DevOps & Tools",
+      "skills": [
+        "Docker",
+        "Git",
+        "GitHub Actions",
+        "Linux",
+        "gRPC",
+        "Prometheus"
+      ]
+    }
+  ],
+  "certifications": [
+    {
+      "name": "AWS Certified Solutions Architect - Associate",
+      "issuer": "Amazon Web Services",
+      "issue_date": "2024-03",
+      "credential_url": "https://aws.amazon.com/verification"
+    },
+    {
+      "name": "Deep Learning Specialization",
+      "issuer": "DeepLearning.AI",
+      "issue_date": "2023-11",
+      "credential_url": "https://coursera.org/verify/specialization/DL123"
+    }
+  ]
+}
