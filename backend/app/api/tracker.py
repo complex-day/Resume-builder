@@ -82,6 +82,24 @@ async def update_application_status_endpoint(
     return updated
 
 
+@router.delete("/{user_id}/applications/{application_id}")
+async def delete_application_endpoint(user_id: str, application_id: str):
+    """Delete an application record."""
+    try:
+        clean_user_id = validate_user_id(user_id)
+    except ValueError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc))
+
+    store = get_tracker_store()
+    deleted = store.delete_application(user_id=clean_user_id, application_id=application_id)
+    if not deleted:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Application '{application_id}' not found for user '{clean_user_id}'."
+        )
+    return {"status": "deleted", "application_id": application_id}
+
+
 @router.get("/{user_id}/analytics", response_model=TrackerAnalyticsResponse)
 async def get_tracker_analytics_endpoint(user_id: str) -> TrackerAnalyticsResponse:
     """Compute callback conversion rates, rank resume styles, and generate data-driven feedback loop insights."""

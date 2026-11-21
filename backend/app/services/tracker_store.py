@@ -138,6 +138,22 @@ class LocalJsonTrackerStore:
         self._save_user_data(valid_id, data)
         return ApplicationRecord.model_validate(app_dict)
 
+    def delete_application(self, user_id: str, application_id: str) -> bool:
+        """Delete an application record by ID."""
+        valid_id = validate_user_id(user_id)
+        data = self._load_user_data(valid_id)
+        clean_app_id = (application_id or "").strip()
+
+        original_count = len(data.get("applications", []))
+        data["applications"] = [
+            a for a in data.get("applications", []) if a.get("application_id") != clean_app_id
+        ]
+
+        if len(data["applications"]) < original_count:
+            self._save_user_data(valid_id, data)
+            return True
+        return False
+
     def compute_analytics_and_feedback(self, user_id: str) -> TrackerAnalyticsResponse:
         """Compute callback conversion rates, rank styles, and generate data-driven feedback insights.
 

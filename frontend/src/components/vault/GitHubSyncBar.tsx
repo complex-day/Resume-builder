@@ -1,0 +1,123 @@
+"use client";
+
+import React, { useState } from "react";
+import { api, SyncGitHubResponse } from "@/lib/api";
+import { Github, Loader2, RefreshCw, CheckCircle2, AlertCircle } from "lucide-react";
+
+interface GitHubSyncBarProps {
+  userId: string;
+  defaultUsername?: string | null;
+  onSyncSuccess: (syncData: SyncGitHubResponse) => void;
+}
+
+export function GitHubSyncBar({
+  userId,
+  defaultUsername = "",
+  onSyncSuccess,
+}: GitHubSyncBarProps) {
+  const [username, setUsername] = useState(defaultUsername || "");
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState<{ text: string; type: "success" | "error" } | null>(
+    null
+  );
+
+  const handleSync = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const cleanUser = username.trim();
+    if (!cleanUser) {
+      setMessage({ text: "Please enter a valid GitHub username.", type: "error" });
+      return;
+    }
+
+    setIsLoading(true);
+    setMessage(null);
+
+    try {
+      const response = await api.syncGitHub(userId, cleanUser, 6);
+      setMessage({
+        text: `Synced ${response.total_projects} total projects (${response.newly_added_count} newly imported, ${response.skipped_project_ids.length} existing preserved).`,
+        type: "success",
+      });
+      onSyncSuccess(response);
+    } catch (err: any) {
+      setMessage({
+        text: err?.message || "Failed to sync GitHub repositories.",
+        type: "error",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="bg-white border border-slate-200 rounded-lg p-4 mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        {/* Left description */}
+        <div>
+          <div className="flex items-center gap-2">
+            <Github className="w-4 h-4 text-slate-800" />
+            <h3 className="text-xs font-semibold text-slate-900">
+              1-Click GitHub repository sync
+            </h3>
+          </div>
+          <p className="text-xs text-slate-500 mt-0.5">
+            Imports non-forked public repositories with verified tech stacks into your Master Truth Vault.
+          </p>
+        </div>
+
+        {/* Form */}
+        <form onSubmit={handleSync} className="flex items-center gap-2 shrink-0">
+          <div className="relative">
+            <span className="absolute left-2.5 top-2 text-xs text-slate-400 font-mono select-none">
+              github.com/
+            </span>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="username"
+              disabled={isLoading}
+              className="text-xs pl-[86px] pr-3 py-1.5 rounded-md border border-slate-300 bg-white text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 font-mono w-48 sm:w-56"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={isLoading || !username.trim()}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-slate-900 hover:bg-slate-800 text-white text-xs font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isLoading ? (
+              <>
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                <span>Syncing repos...</span>
+              </>
+            ) : (
+              <>
+                <RefreshCw className="w-3.5 h-3.5" />
+                <span>Sync GitHub repos</span>
+              </>
+            )}
+          </button>
+        </form>
+      </div>
+
+      {/* Status banner */}
+      {message && (
+        <div
+          className={`mt-3 px-3 py-2 rounded-md text-xs flex items-center gap-2 border ${
+            message.type === "success"
+              ? "bg-emerald-50 text-emerald-800 border-emerald-200"
+              : "bg-rose-50 text-rose-800 border-rose-200"
+          }`}
+        >
+          {message.type === "success" ? (
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+          ) : (
+            <AlertCircle className="w-3.5 h-3.5 text-rose-600 shrink-0" />
+          )}
+          <span>{message.text}</span>
+        </div>
+      )}
+    </div>
+  );
+}
