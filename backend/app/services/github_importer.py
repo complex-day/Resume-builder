@@ -3,6 +3,7 @@
 Strictly adheres to .agent/rules/truth-vault-rule.md:
 - No invented metrics or highlights.
 - Factual grounding directly from repository metadata, languages, and clean README excerpts.
+- Throttled concurrency via asyncio.Semaphore (WC-3).
 """
 
 import asyncio
@@ -36,7 +37,11 @@ def clean_markdown_readme(content: str) -> str:
     # Remove markdown headings (#, ##, etc.)
     text = re.sub(r"^#+\s*", "", text, flags=re.MULTILINE)
     # Remove shields.io or common badge URLs if any remain
-    text = re.sub(r"https?://(?:img\.shields\.io|badge\.fury\.io|codecov\.io|github\.com/[^\s]+/workflows)[^\s]+", " ", text)
+    text = re.sub(
+        r"https?://(?:img\.shields\.io|badge\.fury\.io|codecov\.io|github\.com/[^\s]+/workflows)[^\s]+",
+        " ",
+        text,
+    )
 
     # Filter out empty or badge-only lines
     cleaned_lines: List[str] = []
@@ -61,7 +66,6 @@ def _build_factual_description(name: str, raw_desc: Optional[str], readme_snippe
     snippet = (readme_snippet or "").strip()
 
     if desc and snippet:
-        # Avoid redundant repetition if readme begins with the same description
         if snippet.lower().startswith(desc.lower()):
             combined = snippet
         else:
@@ -73,7 +77,6 @@ def _build_factual_description(name: str, raw_desc: Optional[str], readme_snippe
     else:
         combined = f"GitHub repository: {name}"
 
-    # Truncate cleanly to around 500 characters
     if len(combined) > 500:
         combined = combined[:497].rstrip() + "..."
 
@@ -104,7 +107,7 @@ async def _fetch_repo_details(
 
     # Process languages
     languages: List[str] = []
-    if not isinstance(lang_resp, Exception) and lang_resp.status_code == 200:
+    if not isinstance(lang_resp, Exception) and getattr(lang_resp, "status_code", None) == 200:
         try:
             lang_data = lang_resp.json()
             if isinstance(lang_data, dict):
@@ -126,7 +129,7 @@ async def _fetch_repo_details(
 
     # Process README
     readme_clean = ""
-    if not isinstance(readme_resp, Exception) and readme_resp.status_code == 200:
+    if not isinstance(readme_resp, Exception) and getattr(readme_resp, "status_code", None) == 200:
         try:
             readme_data = readme_resp.json()
             encoded_content = readme_data.get("content", "")
@@ -144,16 +147,16 @@ async def _fetch_repo_details(
         name=name,
         tagline=tagline if (tagline and tagline.strip()) else None,
         description=description,
-        highlights=[],  # Strictly empty per truth-vault-rule.md (never fabricate highlights)
+        highlights=[],  # Strictly empty per truth-vault-rule.md
         tech_stack=tech_stack,
         repo_url=html_url,
         live_url=live_url,
-        metrics=[],  # Strictly empty per truth-vault-rule.md (never fabricate metrics)
+        metrics=[],  # Strictly empty per truth-vault-rule.md
     )
 
 
 async def fetch_github_projects(username: str, max_repos: int = 8) -> List[Project]:
-    """Fetch public, non-forked GitHub repositories for a given username and map into Project schemas."""
+    """Fetch public, non-forked GitHub repositories throttled to 3 concurrent requests (WC-3)."""
     clean_username = username.strip()
     if not clean_username:
         raise HTTPException(status_code=400, detail="GitHub username must not be empty.")
@@ -183,15 +186,18 @@ async def fetch_github_projects(username: str, max_repos: int = 8) -> List[Proje
 
         if resp.status_code == 404:
             raise HTTPException(status_code=404, detail=f"GitHub user '{clean_username}' was not found.")
-        elif resp.status_code == 403:
+        elif resp.status_code in (403, 429):
             raise HTTPException(
-                status_code=403,
-                detail="GitHub API rate limit exceeded. Set GITHUB_TOKEN environment variable to increase limit."
+                status_code=resp.status_code,
+                detail=(
+                    "GitHub API rate limit exceeded or access forbidden. "
+                    "Set the GITHUB_TOKEN environment variable in backend/.env to increase rate limits."
+                ),
             )
         elif resp.status_code != 200:
             raise HTTPException(
                 status_code=resp.status_code,
-                detail=f"GitHub API returned error: {resp.text}"
+                detail=f"GitHub API returned error: {resp.text}",
             )
 
         repos_data = resp.json()
@@ -204,11 +210,14 @@ async def fetch_github_projects(username: str, max_repos: int = 8) -> List[Proje
         if not non_forked_repos:
             return []
 
-        # Fetch details for selected repos concurrently
-        project_tasks = [
-            _fetch_repo_details(client, clean_username, repo)
-            for repo in non_forked_repos
-        ]
+        # Throttle concurrent repo detail fetches using Semaphore(3) (WC-3)
+        semaphore = asyncio.Semaphore(3)
+
+        async def _throttled_fetch(repo_dict: Dict[str, Any]) -> Project:
+            async with semaphore:
+                return await _fetch_repo_details(client, clean_username, repo_dict)
+
+        project_tasks = [_throttled_fetch(repo) for repo in non_forked_repos]
         projects = await asyncio.gather(*project_tasks)
 
         return list(projects)

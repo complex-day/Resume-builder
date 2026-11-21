@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Resumme Builder - ATS Resume Tailor",
+  "version": "1.0.0",
+  "description": "1-Click ATS Tailored Resume Generator for 21+ Job Portals",
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "Resumme Builder - ATS Tailor"
+  },
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage"
+  ],
+  "host_permissions": [
+    "http://localhost:8000/*",
+    "http://127.0.0.1:8000/*"
+  ]
+}
