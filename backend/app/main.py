@@ -7,6 +7,9 @@ from app.api.vault import router as vault_router
 from app.api.pipeline import router as pipeline_router
 from app.api.pdf import router as pdf_router
 from app.api.portal_pack import router as portal_pack_router
+from app.api.skill_sprint import router as skill_sprint_router
+from app.api.tracker import router as tracker_router
+from app.api.bot import router as bot_router
 
 app = FastAPI(
     title="Multi-Agent ATS Resume Builder API",
@@ -33,6 +36,9 @@ app.include_router(vault_router)
 app.include_router(pipeline_router)
 app.include_router(pdf_router)
 app.include_router(portal_pack_router)
+app.include_router(skill_sprint_router)
+app.include_router(tracker_router)
+app.include_router(bot_router)
 
 
 @app.get("/health")
