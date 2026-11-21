@@ -109,6 +109,32 @@ export async function saveSettings(settings: ExtensionSettings): Promise<void> {
 }
 
 /**
+ * Safely format error message from response text after reading body once.
+ */
+function formatErrorDetail(status: number, rawText: string): string {
+  if (!rawText || rawText.trim() === '') {
+    return `HTTP ${status}`
+  }
+  try {
+    const parsed = JSON.parse(rawText)
+    if (parsed && typeof parsed === 'object') {
+      if (typeof parsed.detail === 'string') {
+        return `HTTP ${status}: ${parsed.detail}`
+      }
+      if (parsed.detail) {
+        return `HTTP ${status}: ${JSON.stringify(parsed.detail)}`
+      }
+      if (parsed.message) {
+        return `HTTP ${status}: ${parsed.message}`
+      }
+    }
+  } catch {
+    // Not valid JSON, return cleaned slice of raw text
+  }
+  return `HTTP ${status}: ${rawText.slice(0, 300)}`
+}
+
+/**
  * Fetch candidate's Master Truth Vault to verify existence.
  */
 export async function fetchUserVault(backendUrl: string, userId: string): Promise<any> {
@@ -120,15 +146,20 @@ export async function fetchUserVault(backendUrl: string, userId: string): Promis
     },
   })
 
+  const rawText = await resp.text()
+
   if (!resp.ok) {
     if (resp.status === 404) {
       throw new Error(`Master Truth Vault not found for user '${userId}'.`)
     }
-    const text = await resp.text()
-    throw new Error(`Vault API error (${resp.status}): ${text}`)
+    throw new Error(formatErrorDetail(resp.status, rawText))
   }
 
-  return await resp.json()
+  try {
+    return JSON.parse(rawText)
+  } catch {
+    throw new Error(`Failed to parse vault response from server: ${rawText.slice(0, 200)}`)
+  }
 }
 
 /**
@@ -156,13 +187,17 @@ export async function runResumePipeline(
     body: JSON.stringify(payload),
   })
 
+  const rawText = await resp.text()
+
   if (!resp.ok) {
-    const errorBody = await resp.json().catch(() => null)
-    const errorMsg = errorBody?.detail || (await resp.text()) || `HTTP ${resp.status}`
-    throw new Error(typeof errorMsg === 'string' ? errorMsg : JSON.stringify(errorMsg))
+    throw new Error(formatErrorDetail(resp.status, rawText))
   }
 
-  return (await resp.json()) as PipelineRunResponse
+  try {
+    return JSON.parse(rawText) as PipelineRunResponse
+  } catch {
+    throw new Error(`Invalid JSON pipeline response: ${rawText.slice(0, 200)}`)
+  }
 }
 
 /**
@@ -188,9 +223,8 @@ export async function generateAndDownloadPDF(
   })
 
   if (!resp.ok) {
-    const errorBody = await resp.json().catch(() => null)
-    const errorMsg = errorBody?.detail || (await resp.text()) || `HTTP ${resp.status}`
-    throw new Error(`PDF Generation failed: ${errorMsg}`)
+    const rawText = await resp.text()
+    throw new Error(`PDF Generation failed (${formatErrorDetail(resp.status, rawText)})`)
   }
 
   const blob = await resp.blob()

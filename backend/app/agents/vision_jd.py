@@ -79,12 +79,12 @@ async def extract_jd_from_image(
     from langchain_google_genai import ChatGoogleGenerativeAI
     from langchain_core.messages import HumanMessage
 
-    model_name = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+    model_name = os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
     llm = ChatGoogleGenerativeAI(
         model=model_name,
         google_api_key=api_key,
         temperature=0.0,
-        timeout=30.0,
+        timeout=60.0,
     )
     structured_llm = llm.with_structured_output(VisionExtractResponse)
 

@@ -272,12 +272,12 @@ async def generate_portal_pack(
 
         from langchain_google_genai import ChatGoogleGenerativeAI
 
-        model_name = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+        model_name = os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
         llm = ChatGoogleGenerativeAI(
             model=model_name,
             google_api_key=api_key,
             temperature=0.2,
-            timeout=30.0,
+            timeout=60.0,
         )
         structured_llm = llm.with_structured_output(GeneratedCollateral)
 

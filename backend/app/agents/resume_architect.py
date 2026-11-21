@@ -80,6 +80,13 @@ def verify_vault_grounding(tailored: TailoredResume, vault: MasterTruthVault) ->
     for proj in tailored.projects:
         proj.bullets = [sanitize_ats_text(b) for b in proj.bullets if sanitize_ats_text(b)]
 
+    # Guard against hallucinated core languages (e.g. Java when candidate only has Python/Go/TS)
+    vault_known_lower = {s.strip().lower() for cat in vault.skills for s in cat.skills} | {t.strip().lower() for p in vault.projects for t in p.tech_stack}
+    for cat in tailored.skills:
+        cat.skills = [s for s in cat.skills if not (s.strip().lower() == "java" and "java" not in vault_known_lower)]
+    for proj in tailored.projects:
+        proj.tech_stack = [t for t in proj.tech_stack if not (t.strip().lower() == "java" and "java" not in vault_known_lower)]
+
     return tailored
 
 
@@ -122,12 +129,12 @@ async def build_tailored_resume(
 
         from langchain_google_genai import ChatGoogleGenerativeAI
 
-        model_name = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+        model_name = os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
         llm = ChatGoogleGenerativeAI(
             model=model_name,
             google_api_key=api_key,
             temperature=0.1,
-            timeout=30.0,
+            timeout=60.0,
         )
         structured_llm = llm.with_structured_output(TailoredResume)
 
@@ -139,7 +146,7 @@ async def build_tailored_resume(
             "2. Select the TOP 3 to 4 most relevant projects for the target job role. Use the exact source_project_id from the vault.\n"
             "3. Rewrite project and experience bullets into crisp STAR/XYZ format: 'Accomplished [X] as measured by [Y] by doing [Z]'.\n"
             "4. Only include verified metrics already documented in the vault. Never fabricate percentages, budgets, or numbers.\n"
-            "5. Reorder and highlight skills from the vault that match the target JD must-have and nice-to-have skills.\n"
+            "5. Reorder and highlight skills from the vault that match the target JD must-have and nice-to-have skills. NEVER add or fabricate programming languages or technologies not documented in the vault (e.g. if the JD asks for Java but candidate has Python/Go/TypeScript, NEVER include Java).\n"
             "6. Craft a concise 2-3 line professional summary strictly reflecting the candidate's verified background.\n"
             "7. Do NOT use emojis, decorative icons, markdown headings, or buzzword fluff.\n"
         )
@@ -161,12 +168,12 @@ async def build_tailored_resume(
         try:
             tailored = await asyncio.wait_for(
                 structured_llm.ainvoke(f"{system_instruction}\n\n{user_content}"),
-                timeout=30.0,
+                timeout=60.0,
             )
         except asyncio.TimeoutError:
             raise HTTPException(
                 status_code=504,
-                detail="Resume tailoring request timed out after 30 seconds."
+                detail="Resume tailoring request timed out after 60 seconds."
             )
 
         if not isinstance(tailored, TailoredResume):

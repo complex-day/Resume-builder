@@ -143,40 +143,85 @@ async def decode_jd(
 
         from langchain_google_genai import ChatGoogleGenerativeAI
 
-        model_name = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+        model_name = os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
         llm = ChatGoogleGenerativeAI(
             model=model_name,
             google_api_key=api_key,
             temperature=0.0,
-            timeout=30.0,
+            timeout=60.0,
         )
         structured_llm = llm.with_structured_output(DecodedJD)
 
         system_instruction = (
-            "You are an expert Job Description Analyzer and ATS Strategist.\n"
-            "Analyze the following job description and extract factual criteria strictly.\n"
+            "You are an expert Job Description Analyzer and ATS Strategist for technical roles.\n"
+            "Analyze the following job description and extract factual technical criteria strictly.\n\n"
             "STRICT RULES:\n"
             "1. Do NOT invent, assume, or fabricate any skill or requirement not present in the text.\n"
-            "2. Separate must_have_skills from nice_to_have_skills.\n"
-            "3. Identify role_level (intern, fresher, junior, mid, senior, unknown).\n"
-            "4. Classify company_vibe (startup, corporate, govt, unknown).\n"
-            "5. Extract any explicit eligibility constraints (minimum CGPA, allowed graduation years, maximum age, domicile).\n\n"
+            "2. EXCLUDE BOILERPLATE SECTIONS (CRITICAL FOR INDIAN JOB PORTALS):\n"
+            "   - Completely IGNORE 'About the company' / company descriptions (e.g. business consulting, advisory, SME services, mission statements, retail/fintech clients).\n"
+            "   - Completely IGNORE 'Perks' and benefits (e.g. 'Certificate', 'Letter of recommendation', 'Flexible work hours', '5 days a week', 'Informal dress code', 'Free snacks & beverages').\n"
+            "   - Completely IGNORE portal metadata (e.g. 'Activity on Internshala', 'Hiring since...', 'candidates hired', 'Number of openings', 'Stipend', 'Duration', 'Apply by').\n"
+            "   - Focus EXCLUSIVELY on technical competencies, engineering responsibilities, programming languages, frameworks, methodologies, and tools required for the job role.\n"
+            "3. MUST-HAVE SKILLS:\n"
+            "   - Extract ONLY the top 4 to 6 core technical/role skills explicitly required (e.g. 'Java', 'JavaScript', 'Python', 'SDLC').\n"
+            "   - Must be concise, atomic ATS terms (1 to 3 words max). NEVER full sentences, paragraphs, or verbose clauses.\n"
+            "4. ATS KEYWORDS:\n"
+            "   - Extract ONLY 6 to 10 high-priority technical & role keywords (core languages, engineering practices, frameworks, databases, architecture terms).\n"
+            "   - Keep terms atomic, deduplicated, and strictly relevant to software development/the job function.\n"
+            "5. Identify role_level (intern, fresher, junior, mid, senior, unknown).\n"
+            "6. Classify company_vibe (startup, corporate, govt, unknown).\n"
+            "7. Extract any explicit eligibility constraints (minimum CGPA, allowed graduation years, maximum age, domicile).\n\n"
             f"Job Description Text:\n{clean_text}"
         )
 
         try:
             decoded = await asyncio.wait_for(
                 structured_llm.ainvoke(system_instruction),
-                timeout=30.0,
+                timeout=60.0,
             )
         except asyncio.TimeoutError:
             raise HTTPException(
                 status_code=504,
-                detail="JD decoding request timed out after 30 seconds."
+                detail="JD decoding request timed out after 60 seconds."
             )
 
         if not isinstance(decoded, DecodedJD):
             decoded = DecodedJD.model_validate(decoded)
+
+    BOILERPLATE_FILTER_WORDS = {
+        "certificate", "letter of recommendation", "flexible work", "5 days a week",
+        "informal dress code", "free snacks", "stipend", "openings", "hiring since",
+        "business consulting", "management consulting", "digital transformation",
+        "business advisory", "smes", "perks", "who can apply", "duration"
+    }
+
+    # Sanitize and deduplicate skills/keywords into concise atomic terms
+    def _clean_atomic_keywords(items: list[str], max_items: Optional[int] = None) -> list[str]:
+        seen: set[str] = set()
+        cleaned: list[str] = []
+        for item in items:
+            if not item or not isinstance(item, str):
+                continue
+            s = item.strip()
+            if not s:
+                continue
+            s_lower = s.lower()
+            if any(b in s_lower for b in BOILERPLATE_FILTER_WORDS):
+                continue
+            words = s.split()
+            if len(words) > 4:
+                s = " ".join(words[:3])
+            s_lower = s.lower()
+            if s_lower not in seen:
+                seen.add(s_lower)
+                cleaned.append(s)
+            if max_items and len(cleaned) >= max_items:
+                break
+        return cleaned
+
+    decoded.must_have_skills = _clean_atomic_keywords(decoded.must_have_skills, max_items=6)
+    decoded.nice_to_have_skills = _clean_atomic_keywords(decoded.nice_to_have_skills, max_items=6)
+    decoded.ats_keywords = _clean_atomic_keywords(decoded.ats_keywords, max_items=10)
 
     # Reconcile detected portal from URL
     if detected_portal != "unknown":
