@@ -105,7 +105,7 @@ export function LogApplicationModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 dark:bg-black/60">
-      <div className="bg-white dark:bg-[#111114] border border-slate-200 dark:border-zinc-800 rounded-lg max-w-lg w-full p-6 shadow-xl relative animate-in fade-in duration-150 transition-colors">
+      <div className="bg-white dark:bg-[#111114] border border-slate-200 dark:border-zinc-800 rounded-lg max-w-lg w-full p-4 sm:p-6 max-h-[92vh] overflow-y-auto shadow-xl relative animate-in fade-in duration-150 transition-colors">
         {/* Modal Header */}
         <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-zinc-800 mb-4">
           <div className="flex items-center gap-2">
@@ -277,7 +277,7 @@ export function LogApplicationModal({
             <button
               type="submit"
               disabled={isSaving || !companyName.trim() || !roleTitle.trim()}
-              className="px-3.5 py-1.5 text-xs font-medium bg-emerald-600 hover:bg-emerald-700 text-white rounded-md transition-colors disabled:opacity-50 flex items-center gap-1.5"
+              className="px-3.5 py-1.5 text-xs font-medium bg-emerald-600 hover:bg-emerald-700 text-white rounded-md transition-colors disabled:opacity-50 flex items-center gap-1.5 whitespace-nowrap shrink-0"
             >
               {isSaving ? (
                 <>

@@ -172,7 +172,7 @@ export default function VaultStudioPage() {
       />
 
       {/* Main Body */}
-      <div className="flex-1 max-w-6xl w-full mx-auto px-8 py-6">
+      <div className="flex-1 max-w-6xl w-full mx-auto px-4 py-4 md:px-8 md:py-6">
         {/* Alerts / Banners */}
         {errorMessage && (
           <div className="mb-4 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 text-rose-800 dark:text-rose-200 text-xs px-4 py-3 rounded-md flex items-center justify-between">
@@ -197,9 +197,9 @@ export default function VaultStudioPage() {
           </div>
         )}
 
-        {/* Clean Section Tabs */}
-        <div className="border-b border-slate-200 dark:border-zinc-800 mb-6">
-          <nav className="flex space-x-6" aria-label="Tabs">
+        {/* Clean Section Tabs with horizontal scroll on mobile */}
+        <div className="border-b border-slate-200 dark:border-zinc-800 mb-6 -mx-4 px-4 sm:mx-0 sm:px-0">
+          <nav className="flex space-x-4 sm:space-x-6 overflow-x-auto whitespace-nowrap pb-0.5" aria-label="Tabs">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
@@ -207,14 +207,14 @@ export default function VaultStudioPage() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`group inline-flex items-center gap-2 py-3 px-1 border-b-2 text-xs font-medium transition-colors ${
+                  className={`group inline-flex items-center gap-2 py-3 px-1 border-b-2 text-xs font-medium transition-colors shrink-0 whitespace-nowrap ${
                     isActive
                       ? "border-emerald-600 text-slate-900 dark:text-zinc-100"
                       : "border-transparent text-slate-500 dark:text-zinc-400 hover:text-slate-800 dark:hover:text-zinc-200 hover:border-slate-300 dark:hover:border-zinc-700"
                   }`}
                 >
                   <Icon
-                    className={`w-4 h-4 transition-colors ${
+                    className={`w-4 h-4 transition-colors shrink-0 ${
                       isActive ? "text-emerald-600 dark:text-emerald-500" : "text-slate-400 dark:text-zinc-500 group-hover:text-slate-600 dark:group-hover:text-zinc-300"
                     }`}
                   />

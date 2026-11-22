@@ -136,14 +136,14 @@ export default function TrackerPage() {
   return (
     <div className="flex-1 flex flex-col min-h-screen">
       {/* Header */}
-      <header className="sticky top-0 z-20 bg-white dark:bg-[#111114] border-b border-slate-200 dark:border-zinc-800 px-8 py-3.5 flex items-center justify-between transition-colors">
+      <header className="sticky top-0 z-20 bg-white dark:bg-[#111114] border-b border-slate-200 dark:border-zinc-800 px-4 py-3 md:px-8 md:py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-colors">
         <div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <h1 className="text-base font-semibold text-slate-900 dark:text-zinc-100 flex items-center gap-2">
               <Kanban className="w-4 h-4 text-emerald-600 dark:text-emerald-500" />
               Application Tracker
             </h1>
-            <span className="text-xs text-slate-500 dark:text-zinc-400 font-mono bg-slate-100 dark:bg-zinc-800 px-2 py-0.5 rounded-md border border-slate-200 dark:border-zinc-700">
+            <span className="text-xs text-slate-500 dark:text-zinc-400 font-mono bg-slate-100 dark:bg-zinc-800 px-2 py-0.5 rounded-md border border-slate-200 dark:border-zinc-700 whitespace-nowrap">
               user: {userId}
             </span>
           </div>
@@ -152,12 +152,12 @@ export default function TrackerPage() {
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto shrink-0">
           <button
             type="button"
             onClick={loadTrackerData}
             disabled={isLoading}
-            className="p-1.5 text-slate-500 dark:text-zinc-400 hover:text-slate-800 dark:hover:text-zinc-200 border border-slate-200 dark:border-zinc-800 rounded-md hover:bg-slate-50 dark:hover:bg-zinc-800 transition-colors"
+            className="p-1.5 text-slate-500 dark:text-zinc-400 hover:text-slate-800 dark:hover:text-zinc-200 border border-slate-200 dark:border-zinc-800 rounded-md hover:bg-slate-50 dark:hover:bg-zinc-800 transition-colors shrink-0"
             title="Refresh application tracker"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? "animate-spin" : ""}`} />
@@ -167,7 +167,7 @@ export default function TrackerPage() {
           <button
             type="button"
             onClick={() => setIsModalOpen(true)}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-medium rounded-md bg-emerald-600 hover:bg-emerald-700 text-white transition-colors shadow-sm"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-medium rounded-md bg-emerald-600 hover:bg-emerald-700 text-white transition-colors shadow-sm whitespace-nowrap shrink-0"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Log Application</span>
@@ -176,7 +176,7 @@ export default function TrackerPage() {
       </header>
 
       {/* Main Viewport Content */}
-      <div className="flex-1 max-w-7xl w-full mx-auto px-8 py-6">
+      <div className="flex-1 max-w-7xl w-full mx-auto px-4 py-4 md:px-8 md:py-6">
         {/* Error banner */}
         {errorMessage && (
           <div className="mb-4 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 text-rose-800 dark:text-rose-200 text-xs px-4 py-3 rounded-md flex items-center justify-between">

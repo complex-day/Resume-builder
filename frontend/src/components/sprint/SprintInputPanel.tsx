@@ -56,7 +56,7 @@ export function SprintInputPanel({
 
   return (
     <div className="bg-white dark:bg-[#111114] border border-slate-200 dark:border-zinc-800 rounded-lg p-5 transition-colors">
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
         <div>
           <h2 className="text-sm font-semibold text-slate-900 dark:text-zinc-100">Target job description</h2>
           <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">

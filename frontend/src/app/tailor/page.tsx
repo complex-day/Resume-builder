@@ -162,14 +162,14 @@ export default function TailorStudioPage() {
   return (
     <div className="flex-1 flex flex-col min-h-screen">
       {/* Top Header */}
-      <header className="sticky top-0 z-20 bg-white dark:bg-[#111114] border-b border-slate-200 dark:border-zinc-800 px-8 py-3.5 flex items-center justify-between transition-colors">
+      <header className="sticky top-0 z-20 bg-white dark:bg-[#111114] border-b border-slate-200 dark:border-zinc-800 px-4 py-3 md:px-8 md:py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-colors">
         <div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <h1 className="text-base font-semibold text-slate-900 dark:text-zinc-100 flex items-center gap-2">
               <Wand2 className="w-4 h-4 text-emerald-600 dark:text-emerald-500" />
               Tailor Studio
             </h1>
-            <span className="text-xs text-slate-500 dark:text-zinc-400 font-mono bg-slate-100 dark:bg-zinc-800 px-2 py-0.5 rounded-md border border-slate-200 dark:border-zinc-700">
+            <span className="text-xs text-slate-500 dark:text-zinc-400 font-mono bg-slate-100 dark:bg-zinc-800 px-2 py-0.5 rounded-md border border-slate-200 dark:border-zinc-700 whitespace-nowrap">
               user: {userId}
             </span>
           </div>
@@ -180,7 +180,7 @@ export default function TailorStudioPage() {
 
         <Link
           href="/"
-          className="text-xs text-slate-600 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-zinc-100 font-medium flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-slate-200 dark:border-zinc-800 hover:bg-slate-50 dark:hover:bg-zinc-800 transition-colors"
+          className="text-xs text-slate-600 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-zinc-100 font-medium flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-slate-200 dark:border-zinc-800 hover:bg-slate-50 dark:hover:bg-zinc-800 transition-colors whitespace-nowrap shrink-0 self-start sm:self-auto"
         >
           <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-500" />
           <span>Truth Vault</span>
@@ -189,7 +189,7 @@ export default function TailorStudioPage() {
       </header>
 
       {/* Main Container */}
-      <div className="flex-1 max-w-7xl w-full mx-auto px-8 py-6">
+      <div className="flex-1 max-w-7xl w-full mx-auto px-4 py-4 md:px-8 md:py-6">
         {/* Error notification banner */}
         {errorMessage && (
           <div className="mb-6 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 text-rose-800 dark:text-rose-200 text-xs px-4 py-3 rounded-md flex items-center justify-between">

@@ -93,13 +93,13 @@ export default function SkillSprintPage() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto py-8 px-6 space-y-6">
+    <div className="max-w-6xl w-full mx-auto px-4 py-4 md:px-6 md:py-8 space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <h1 className="text-xl font-bold text-slate-900 dark:text-zinc-100">48-Hr Skill Sprint</h1>
-            <span className="text-xs font-mono text-emerald-800 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 px-2 py-0.5 rounded-md">
+            <span className="text-xs font-mono text-emerald-800 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 px-2 py-0.5 rounded-md whitespace-nowrap">
               Proof-of-work generator
             </span>
           </div>
@@ -108,7 +108,7 @@ export default function SkillSprintPage() {
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 whitespace-nowrap shrink-0 self-start sm:self-auto">
           <span className="text-xs text-slate-500 dark:text-zinc-400">Active profile:</span>
           <span className="text-xs font-mono font-medium text-slate-800 dark:text-zinc-200 bg-slate-100 dark:bg-zinc-800 px-2 py-1 rounded-md border border-slate-200 dark:border-zinc-700">
             {userId}

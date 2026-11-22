@@ -68,7 +68,7 @@ export function ResumePreview({
     <div className="bg-paper-sheet rounded-lg p-6 space-y-5 transition-colors">
       {/* Tab Navigation */}
       <div className="border-b border-slate-200 dark:border-zinc-800 flex flex-wrap items-center justify-between gap-2">
-        <nav className="flex space-x-6">
+        <nav className="flex space-x-4 sm:space-x-6 overflow-x-auto whitespace-nowrap pb-0.5">
           <button
             type="button"
             onClick={() => setActiveTab("summary")}

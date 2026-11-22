@@ -66,8 +66,8 @@ export function GitHubSyncBar({
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSync} className="flex items-center gap-2 shrink-0">
-          <div className="relative">
+        <form onSubmit={handleSync} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto shrink-0">
+          <div className="relative flex-1 sm:flex-initial">
             <span className="absolute left-2.5 top-2 text-xs text-slate-400 dark:text-zinc-500 font-mono select-none">
               github.com/
             </span>
@@ -77,14 +77,14 @@ export function GitHubSyncBar({
               onChange={(e) => setUsername(e.target.value)}
               placeholder="username"
               disabled={isLoading}
-              className="text-xs pl-[86px] pr-3 py-1.5 rounded-md border border-slate-300 dark:border-zinc-700 bg-white dark:bg-[#18181B] text-slate-900 dark:text-zinc-100 placeholder:text-slate-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 font-mono w-48 sm:w-56"
+              className="text-xs pl-[86px] pr-3 py-1.5 rounded-md border border-slate-300 dark:border-zinc-700 bg-white dark:bg-[#18181B] text-slate-900 dark:text-zinc-100 placeholder:text-slate-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 font-mono w-full sm:w-56"
             />
           </div>
 
           <button
             type="submit"
             disabled={isLoading || !username.trim()}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-slate-900 dark:bg-zinc-100 hover:bg-slate-800 dark:hover:bg-zinc-200 text-white dark:text-zinc-900 text-xs font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md bg-slate-900 dark:bg-zinc-100 hover:bg-slate-800 dark:hover:bg-zinc-200 text-white dark:text-zinc-900 text-xs font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
           >
             {isLoading ? (
               <>

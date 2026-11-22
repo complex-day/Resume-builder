@@ -32,12 +32,12 @@ export default function RootLayout({
       <body className="bg-slate-50 dark:bg-[#09090B] text-slate-900 dark:text-zinc-100 min-h-screen antialiased selection:bg-emerald-100 dark:selection:bg-emerald-950 selection:text-emerald-900 dark:selection:text-emerald-200 font-sans transition-colors duration-150">
         <ThemeProvider>
           <UserProvider>
-            <div className="flex min-h-screen">
-              {/* Fixed 240px Sidebar */}
+            <div className="flex flex-col md:flex-row min-h-screen">
+              {/* Responsive Sidebar & Mobile Top Bar */}
               <Sidebar />
 
               {/* Main scrollable viewport */}
-              <main className="flex-1 ml-[240px] min-h-screen flex flex-col bg-dot-grid dark:bg-[#09090B] dark:text-zinc-100">
+              <main className="flex-1 min-w-0 md:ml-[240px] min-h-screen flex flex-col bg-dot-grid dark:bg-[#09090B] dark:text-zinc-100">
                 {children}
               </main>
             </div>
