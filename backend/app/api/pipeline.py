@@ -1,6 +1,7 @@
 """Pipeline API routes for multi-agent resume synthesis and analysis."""
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
+from app.limiter import limiter, get_rate_limit_str, is_rate_limit_exempt
 from app.schemas.pipeline import (
     DecodedJD,
     JDDecodeRequest,
@@ -41,28 +42,32 @@ async def tailor_resume_endpoint(request: TailorResumeRequest) -> TailoredResume
 
 
 @router.post("/run", response_model=PipelineRunResponse)
-async def run_pipeline_endpoint(request: PipelineRunRequest) -> PipelineRunResponse:
+@limiter.limit(get_rate_limit_str, exempt_when=is_rate_limit_exempt)
+async def run_pipeline_endpoint(
+    request: Request,
+    payload: PipelineRunRequest,
+) -> PipelineRunResponse:
     """Execute the full 3-Agent LangGraph orchestration pipeline with automated retry loop.
 
     Requires either an inline 'vault' or a 'user_id' stored in the local vault store.
     """
-    vault = request.vault
+    vault = payload.vault
     if vault is None:
-        if not request.user_id:
+        if not payload.user_id:
             raise HTTPException(
                 status_code=422,
                 detail="Either 'vault' (inline) or 'user_id' must be provided."
             )
         store = get_vault_store()
-        vault = store.get_vault(request.user_id)
+        vault = store.get_vault(payload.user_id)
         if not vault:
             raise HTTPException(
                 status_code=404,
-                detail=f"Vault not found for user '{request.user_id}'."
+                detail=f"Vault not found for user '{payload.user_id}'."
             )
 
     return await run_resume_pipeline(
         vault=vault,
-        raw_jd_text=request.raw_jd_text,
-        source_url=request.source_url,
+        raw_jd_text=payload.raw_jd_text,
+        source_url=payload.source_url,
     )

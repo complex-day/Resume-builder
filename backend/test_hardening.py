@@ -1,12 +1,14 @@
-"""Verification test suite for backend hardening fixes (WC-1, WC-3, WC-5, WC-6, WC-7)."""
+"""Verification test suite for backend hardening fixes (WC-1, WC-3, WC-5, WC-6, WC-7, Rate Limiting, Security Headers)."""
 
 import json
+import os
 from pathlib import Path
 from unittest.mock import AsyncMock, patch
 from fastapi.testclient import TestClient
 from starlette.middleware.cors import CORSMiddleware
 
 from app.main import app
+from app.limiter import limiter
 from app.agents.jd_decoder import detect_portal_from_url
 from app.schemas.truth_vault import MasterTruthVault, Project
 
@@ -66,9 +68,77 @@ def test_cors_hardening():
     print("  CORS hardening verified successfully.\n")
 
 
+def test_security_headers():
+    """Verify security headers are applied to HTTP endpoints (including /health)."""
+    print("[HARDENING 2] Verifying Security Headers Middleware:")
+    resp = client.get("/health")
+    assert resp.status_code == 200, f"Expected 200, got {resp.status_code}"
+
+    assert resp.headers.get("x-content-type-options") == "nosniff", "Missing X-Content-Type-Options: nosniff"
+    assert resp.headers.get("x-frame-options") == "DENY", "Missing X-Frame-Options: DENY"
+    assert resp.headers.get("referrer-policy") == "strict-origin-when-cross-origin", "Missing Referrer-Policy"
+
+    print(f"  X-Content-Type-Options: {resp.headers.get('x-content-type-options')}")
+    print(f"  X-Frame-Options: {resp.headers.get('x-frame-options')}")
+    print(f"  Referrer-Policy: {resp.headers.get('referrer-policy')}")
+    print("  Security headers verified successfully.\n")
+
+
+def test_rate_limiting():
+    """Verify IP rate limiting on LLM endpoints: returns 429 when exceeded and toggles via RATE_LIMIT_ENABLED."""
+    print("[HARDENING 3] Verifying IP Rate Limiting & 429 Handling:")
+    test_ip = "198.51.100.42"
+    headers = {"X-Forwarded-For": test_ip}
+
+    # Reset limiter storage before testing
+    limiter.reset()
+
+    # Enable rate limiting with strict 2 requests per minute limit
+    os.environ["RATE_LIMIT_ENABLED"] = "true"
+    os.environ["RATE_LIMIT_PER_MINUTE"] = "2"
+    payload = {
+        "raw_jd_text": "Software engineer with distributed backend microservices experience.",
+        "user_id": "non_existent_test_user",
+    }
+
+    try:
+        # Request 1: Should pass through to endpoint
+        r1 = client.post("/api/v1/pipeline/run", json=payload, headers=headers)
+        assert r1.status_code != 429, f"Request 1 unexpectedly rate limited: {r1.status_code}"
+        print(f"  Request 1: Status {r1.status_code} (Allowed)")
+
+        # Request 2: Should pass through to endpoint
+        r2 = client.post("/api/v1/pipeline/run", json=payload, headers=headers)
+        assert r2.status_code != 429, f"Request 2 unexpectedly rate limited: {r2.status_code}"
+        print(f"  Request 2: Status {r2.status_code} (Allowed)")
+
+        # Request 3: Must trigger HTTP 429 Rate Limit Exceeded
+        r3 = client.post("/api/v1/pipeline/run", json=payload, headers=headers)
+        print(f"  Request 3: Status {r3.status_code} (Rate Limited)")
+        assert r3.status_code == 429, f"Expected 429 for Request 3, got {r3.status_code}: {r3.text}"
+        data3 = r3.json()
+        assert "error" in data3, "Response JSON must contain 'error' key"
+        assert "detail" in data3, "Response JSON must contain 'detail' key"
+        assert "Rate limit exceeded" in data3["detail"]
+        print(f"  Request 3 429 JSON response: {data3}")
+
+        # Test toggle: RATE_LIMIT_ENABLED=false disables rate limiting
+        os.environ["RATE_LIMIT_ENABLED"] = "false"
+        r4 = client.post("/api/v1/pipeline/run", json=payload, headers=headers)
+        print(f"  Request 4 (RATE_LIMIT_ENABLED=false): Status {r4.status_code}")
+        assert r4.status_code != 429, f"Expected rate limiting to be bypassed when disabled, got {r4.status_code}"
+        print("  Rate limit toggle via RATE_LIMIT_ENABLED verified successfully.\n")
+
+    finally:
+        # Restore defaults
+        os.environ["RATE_LIMIT_ENABLED"] = "true"
+        os.environ["RATE_LIMIT_PER_MINUTE"] = "5"
+        limiter.reset()
+
+
 def test_strict_hostname_portal_detection():
     """WC-6: Strict hostname matching for job portal detection."""
-    print("[HARDENING 2] Verifying Strict Hostname Portal Matching (WC-6):")
+    print("[HARDENING 4] Verifying Strict Hostname Portal Matching (WC-6):")
     # Substring trap URL: contains 'nats' in domain name but is NOT the government portal
     trap_url = "https://careers.nats-technologies.com/jobs/123"
     trap_result = detect_portal_from_url(trap_url)
@@ -98,7 +168,7 @@ def test_strict_hostname_portal_detection():
 
 def test_merge_transparency_skipped_ids():
     """WC-5: Verify skipped_project_ids in GitHub sync response (deterministic offline mock)."""
-    print("[HARDENING 3] Verifying Merge Transparency (WC-5):")
+    print("[HARDENING 5] Verifying Merge Transparency (WC-5):")
     user_id = "test_hardening_user"
     sample_vault_path = Path(__file__).parent / "sample_vault.json"
     with open(sample_vault_path, "r", encoding="utf-8") as f:
@@ -164,6 +234,8 @@ def test_merge_transparency_skipped_ids():
 def run_all_hardening_tests():
     print("=== Running Backend Hardening Verification Suite ===\n")
     test_cors_hardening()
+    test_security_headers()
+    test_rate_limiting()
     test_strict_hostname_portal_detection()
     test_merge_transparency_skipped_ids()
     print("=== ALL BACKEND HARDENING TESTS PASSED SUCCESSFULLY ===")

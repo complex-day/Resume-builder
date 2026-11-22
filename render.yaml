@@ -1,0 +1,26 @@
+# Render Free Tier Blueprint Specification
+# Deploys the Multi-Agent ATS Resume Builder FastAPI Backend on 100% Free Tier Docker Runtime
+services:
+  - type: web
+    name: resume-builder-backend
+    runtime: docker
+    plan: free
+    rootDir: backend
+    dockerfilePath: Dockerfile
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-3.5-flash-lite
+      - key: CORS_ORIGINS
+        sync: false
+      - key: GITHUB_TOKEN
+        sync: false
+      - key: BOT_WEBHOOK_SECRET
+        sync: false
+      - key: RATE_LIMIT_ENABLED
+        value: "true"
+      - key: RATE_LIMIT_PER_MINUTE
+        value: "5"

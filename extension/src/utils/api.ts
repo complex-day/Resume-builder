@@ -70,7 +70,7 @@ export interface PipelineRunResponse {
   status: 'passed' | 'best_effort_after_max_retries'
 }
 
-const DEFAULT_BACKEND_URL = 'http://localhost:8000'
+const DEFAULT_BACKEND_URL = 'http://127.0.0.1:8000'
 const DEFAULT_USER_ID = 'test-user'
 
 /**

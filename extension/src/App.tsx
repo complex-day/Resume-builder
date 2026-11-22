@@ -19,7 +19,7 @@ type AppState = 'idle' | 'extracting' | 'decoding' | 'architecting' | 'critiquin
 export default function App() {
   // Settings
   const [settings, setSettings] = useState<ExtensionSettings>({
-    backendUrl: 'http://localhost:8000',
+    backendUrl: 'http://127.0.0.1:8000',
     userId: 'test-user',
   })
   const [showSettings, setShowSettings] = useState<boolean>(false)
@@ -239,7 +239,7 @@ export default function App() {
               value={settings.backendUrl}
               onChange={(e) => setSettings({ ...settings, backendUrl: e.target.value })}
               className="w-full px-2 py-1 text-xs bg-white border border-slate-300 rounded focus:ring-1 focus:ring-emerald-500 focus:outline-none"
-              placeholder="http://localhost:8000"
+              placeholder="http://127.0.0.1:8000"
             />
           </div>
           <div>
@@ -460,10 +460,24 @@ export default function App() {
         )}
       </div>
 
-      {/* Footer info bar */}
+      {/* Footer info bar with collapsible API configuration */}
       <footer className="px-3 py-2 bg-slate-100 border-t border-slate-200 flex items-center justify-between text-[10px] text-slate-500">
-        <span>Truth Vault: <b className="text-slate-700">{settings.userId}</b></span>
-        <span>Zero Hallucinations</span>
+        <div className="flex items-center space-x-1.5 truncate max-w-[210px]">
+          <span>API:</span>
+          <button
+            onClick={() => setShowSettings(!showSettings)}
+            className="text-slate-700 hover:text-emerald-700 font-mono truncate underline decoration-slate-300 underline-offset-2 transition-colors duration-150"
+            title="Configure Backend API URL"
+          >
+            {settings.backendUrl || 'http://127.0.0.1:8000'}
+          </button>
+        </div>
+        <button
+          onClick={() => setShowSettings(!showSettings)}
+          className="text-slate-600 hover:text-slate-900 font-medium text-[10px] ml-2 flex items-center space-x-1 transition-colors duration-150"
+        >
+          <span>{showSettings ? 'Close' : 'Config'}</span>
+        </button>
       </footer>
     </div>
   )

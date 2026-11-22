@@ -4,7 +4,8 @@ import base64
 import os
 import re
 from typing import Optional
-from fastapi import APIRouter, Depends, Header, HTTPException, status
+from fastapi import APIRouter, Depends, Header, HTTPException, Request, status
+from app.limiter import limiter, get_rate_limit_str, is_rate_limit_exempt
 
 from app.schemas.bot import (
     BotIncomingMessage,
@@ -43,7 +44,11 @@ async def extract_jd_image_endpoint(request: VisionExtractRequest) -> VisionExtr
 
 
 @router.post("/webhook", response_model=BotReplyResponse, dependencies=[Depends(verify_webhook_secret)])
-async def bot_webhook_endpoint(message: BotIncomingMessage) -> BotReplyResponse:
+@limiter.limit(get_rate_limit_str, exempt_when=is_rate_limit_exempt)
+async def bot_webhook_endpoint(
+    request: Request,
+    message: BotIncomingMessage,
+) -> BotReplyResponse:
     """Main webhook receiver for WhatsApp Cloud API, Twilio, and Telegram bots.
 
     Extracts JD from text or screenshot, runs multi-agent resume tailoring,
