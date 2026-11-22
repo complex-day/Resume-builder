@@ -176,10 +176,10 @@ export function ProjectsSection({
       {/* Projects Header & Add Button */}
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-xs font-semibold text-slate-900 tracking-tight flex items-center gap-1.5">
-            <FolderGit2 className="w-4 h-4 text-emerald-600" /> Verified projects portfolio
+          <h3 className="text-xs font-semibold text-slate-900 dark:text-zinc-100 tracking-tight flex items-center gap-1.5">
+            <FolderGit2 className="w-4 h-4 text-emerald-600 dark:text-emerald-500" /> Verified projects portfolio
           </h3>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">
             Real production repositories, implementations, and quantified engineering impact.
           </p>
         </div>
@@ -188,7 +188,7 @@ export function ProjectsSection({
           <button
             type="button"
             onClick={handleStartAdd}
-            className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium rounded-md bg-slate-900 hover:bg-slate-800 text-white transition-colors"
+            className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium rounded-md bg-slate-900 dark:bg-zinc-100 hover:bg-slate-800 dark:hover:bg-zinc-200 text-white dark:text-zinc-900 transition-colors"
           >
             <Plus className="w-3.5 h-3.5" /> Add project
           </button>
@@ -197,9 +197,9 @@ export function ProjectsSection({
 
       {/* Modal / Inline Editor for Add or Edit */}
       {(isAddingNew || editingIndex !== null) && editFormData && (
-        <div className="bg-white border-2 border-slate-300 rounded-lg p-6 shadow-sm space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-            <h4 className="text-sm font-semibold text-slate-900">
+        <div className="bg-white dark:bg-[#111114] border-2 border-slate-300 dark:border-zinc-700 rounded-lg p-6 shadow-sm space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-zinc-800">
+            <h4 className="text-sm font-semibold text-slate-900 dark:text-zinc-100">
               {isAddingNew ? "Add technical project" : `Edit project: ${editFormData.name}`}
             </h4>
             <div className="flex items-center gap-2">
@@ -214,7 +214,7 @@ export function ProjectsSection({
               <button
                 type="button"
                 onClick={cancelEdit}
-                className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium rounded-md text-slate-600 hover:bg-slate-100"
+                className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium rounded-md text-slate-600 dark:text-zinc-400 hover:bg-slate-100 dark:hover:bg-zinc-800"
               >
                 <X className="w-3.5 h-3.5" /> Cancel
               </button>
@@ -223,7 +223,7 @@ export function ProjectsSection({
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-medium text-slate-700 mb-1">
+              <label className="block text-xs font-medium text-slate-700 dark:text-zinc-300 mb-1">
                 Project name <span className="text-rose-500">*</span>
               </label>
               <input
@@ -231,12 +231,12 @@ export function ProjectsSection({
                 value={editFormData.name}
                 onChange={(e) => setEditFormData({ ...editFormData, name: e.target.value })}
                 placeholder="e.g. ChronoQueue"
-                className="w-full text-xs px-3 py-2 rounded-md border border-slate-300 focus:outline-none focus:border-emerald-600 bg-white"
+                className="w-full text-xs px-3 py-2 rounded-md border border-slate-300 dark:border-zinc-700 focus:outline-none focus:border-emerald-600 bg-white dark:bg-[#18181B] text-slate-900 dark:text-zinc-100"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-700 mb-1">
+              <label className="block text-xs font-medium text-slate-700 dark:text-zinc-300 mb-1">
                 Unique slug / identifier <span className="text-rose-500">*</span>
               </label>
               <input
@@ -244,12 +244,12 @@ export function ProjectsSection({
                 value={editFormData.id}
                 onChange={(e) => setEditFormData({ ...editFormData, id: e.target.value })}
                 placeholder="e.g. chrono-queue"
-                className="w-full text-xs px-3 py-2 rounded-md border border-slate-300 focus:outline-none focus:border-emerald-600 bg-white font-mono"
+                className="w-full text-xs px-3 py-2 rounded-md border border-slate-300 dark:border-zinc-700 focus:outline-none focus:border-emerald-600 bg-white dark:bg-[#18181B] text-slate-900 dark:text-zinc-100 font-mono"
               />
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-xs font-medium text-slate-700 mb-1">
+              <label className="block text-xs font-medium text-slate-700 dark:text-zinc-300 mb-1">
                 Tagline / pitch
               </label>
               <input
@@ -257,12 +257,12 @@ export function ProjectsSection({
                 value={editFormData.tagline || ""}
                 onChange={(e) => setEditFormData({ ...editFormData, tagline: e.target.value })}
                 placeholder="One-line elevator pitch"
-                className="w-full text-xs px-3 py-2 rounded-md border border-slate-300 focus:outline-none focus:border-emerald-600 bg-white"
+                className="w-full text-xs px-3 py-2 rounded-md border border-slate-300 dark:border-zinc-700 focus:outline-none focus:border-emerald-600 bg-white dark:bg-[#18181B] text-slate-900 dark:text-zinc-100"
               />
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-xs font-medium text-slate-700 mb-1">
+              <label className="block text-xs font-medium text-slate-700 dark:text-zinc-300 mb-1">
                 Description <span className="text-rose-500">*</span>
               </label>
               <textarea
@@ -272,12 +272,12 @@ export function ProjectsSection({
                   setEditFormData({ ...editFormData, description: e.target.value })
                 }
                 placeholder="Comprehensive factual overview of the system..."
-                className="w-full text-xs p-3 rounded-md border border-slate-300 focus:outline-none focus:border-emerald-600 bg-white"
+                className="w-full text-xs p-3 rounded-md border border-slate-300 dark:border-zinc-700 focus:outline-none focus:border-emerald-600 bg-white dark:bg-[#18181B] text-slate-900 dark:text-zinc-100"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-700 mb-1">
+              <label className="block text-xs font-medium text-slate-700 dark:text-zinc-300 mb-1">
                 Repository URL
               </label>
               <input
@@ -285,12 +285,12 @@ export function ProjectsSection({
                 value={editFormData.repo_url || ""}
                 onChange={(e) => setEditFormData({ ...editFormData, repo_url: e.target.value })}
                 placeholder="https://github.com/org/repo"
-                className="w-full text-xs px-3 py-2 rounded-md border border-slate-300 focus:outline-none focus:border-emerald-600 bg-white font-mono text-[11px]"
+                className="w-full text-xs px-3 py-2 rounded-md border border-slate-300 dark:border-zinc-700 focus:outline-none focus:border-emerald-600 bg-white dark:bg-[#18181B] text-slate-900 dark:text-zinc-100 font-mono text-[11px]"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-700 mb-1">
+              <label className="block text-xs font-medium text-slate-700 dark:text-zinc-300 mb-1">
                 Live deployment URL
               </label>
               <input
@@ -298,27 +298,27 @@ export function ProjectsSection({
                 value={editFormData.live_url || ""}
                 onChange={(e) => setEditFormData({ ...editFormData, live_url: e.target.value })}
                 placeholder="https://app.demo.com"
-                className="w-full text-xs px-3 py-2 rounded-md border border-slate-300 focus:outline-none focus:border-emerald-600 bg-white font-mono text-[11px]"
+                className="w-full text-xs px-3 py-2 rounded-md border border-slate-300 dark:border-zinc-700 focus:outline-none focus:border-emerald-600 bg-white dark:bg-[#18181B] text-slate-900 dark:text-zinc-100 font-mono text-[11px]"
               />
             </div>
           </div>
 
           {/* Tech Stack Chips Editor */}
-          <div className="pt-3 border-t border-slate-100">
-            <label className="block text-xs font-medium text-slate-700 mb-1">
+          <div className="pt-3 border-t border-slate-100 dark:border-zinc-800">
+            <label className="block text-xs font-medium text-slate-700 dark:text-zinc-300 mb-1">
               Tech stack technologies
             </label>
             <div className="flex flex-wrap gap-1.5 mb-2">
               {editFormData.tech_stack.map((tech) => (
                 <span
                   key={tech}
-                  className="inline-flex items-center gap-1 text-xs bg-slate-100 text-slate-800 px-2 py-0.5 rounded-md border border-slate-200"
+                  className="inline-flex items-center gap-1 text-xs bg-slate-100 dark:bg-zinc-800 text-slate-800 dark:text-zinc-200 px-2 py-0.5 rounded-md border border-slate-200 dark:border-zinc-700"
                 >
                   {tech}
                   <button
                     type="button"
                     onClick={() => removeTechStackItem(tech)}
-                    className="text-slate-400 hover:text-rose-600 rounded"
+                    className="text-slate-400 dark:text-zinc-500 hover:text-rose-600 dark:hover:text-rose-400 rounded"
                   >
                     <X className="w-3 h-3" />
                   </button>
@@ -337,13 +337,13 @@ export function ProjectsSection({
                   }
                 }}
                 placeholder="e.g. Python, Docker, Redis..."
-                className="text-xs px-2.5 py-1.5 rounded-md border border-slate-300 focus:outline-none focus:border-emerald-600 w-64 bg-white"
+                className="text-xs px-2.5 py-1.5 rounded-md border border-slate-300 dark:border-zinc-700 focus:outline-none focus:border-emerald-600 w-64 bg-white dark:bg-[#18181B] text-slate-900 dark:text-zinc-100"
               />
               <button
                 type="button"
                 onClick={addTechStackItem}
                 disabled={!techStackInput.trim()}
-                className="px-2.5 py-1.5 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-md disabled:opacity-50"
+                className="px-2.5 py-1.5 text-xs bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 text-slate-700 dark:text-zinc-300 rounded-md disabled:opacity-50"
               >
                 Add tech
               </button>
@@ -351,21 +351,21 @@ export function ProjectsSection({
           </div>
 
           {/* Highlights (STAR bullets) Editor */}
-          <div className="pt-3 border-t border-slate-100">
-            <label className="block text-xs font-medium text-slate-700 mb-1">
+          <div className="pt-3 border-t border-slate-100 dark:border-zinc-800">
+            <label className="block text-xs font-medium text-slate-700 dark:text-zinc-300 mb-1">
               Implementation highlights
             </label>
             <div className="space-y-1.5 mb-2">
               {editFormData.highlights.map((highlight, idx) => (
                 <div
                   key={idx}
-                  className="flex items-start justify-between gap-2 text-xs bg-slate-50 p-2 rounded-md border border-slate-200 text-slate-800"
+                  className="flex items-start justify-between gap-2 text-xs bg-slate-50 dark:bg-zinc-900/50 p-2 rounded-md border border-slate-200 dark:border-zinc-700 text-slate-800 dark:text-zinc-200"
                 >
                   <span>&bull; {highlight}</span>
                   <button
                     type="button"
                     onClick={() => removeHighlightItem(idx)}
-                    className="text-slate-400 hover:text-rose-600 shrink-0 rounded"
+                    className="text-slate-400 dark:text-zinc-500 hover:text-rose-600 dark:hover:text-rose-400 shrink-0 rounded"
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>
@@ -384,13 +384,13 @@ export function ProjectsSection({
                   }
                 }}
                 placeholder="Add verified achievement bullet point..."
-                className="flex-1 text-xs px-2.5 py-1.5 rounded-md border border-slate-300 focus:outline-none focus:border-emerald-600 bg-white"
+                className="flex-1 text-xs px-2.5 py-1.5 rounded-md border border-slate-300 dark:border-zinc-700 focus:outline-none focus:border-emerald-600 bg-white dark:bg-[#18181B] text-slate-900 dark:text-zinc-100"
               />
               <button
                 type="button"
                 onClick={addHighlightItem}
                 disabled={!highlightInput.trim()}
-                className="px-2.5 py-1.5 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-md disabled:opacity-50"
+                className="px-2.5 py-1.5 text-xs bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 text-slate-700 dark:text-zinc-300 rounded-md disabled:opacity-50"
               >
                 Add highlight
               </button>
@@ -398,21 +398,21 @@ export function ProjectsSection({
           </div>
 
           {/* Metrics Editor */}
-          <div className="pt-3 border-t border-slate-100">
-            <label className="block text-xs font-medium text-slate-700 mb-1">
+          <div className="pt-3 border-t border-slate-100 dark:border-zinc-800">
+            <label className="block text-xs font-medium text-slate-700 dark:text-zinc-300 mb-1">
               Verified quantitative metrics
             </label>
             <div className="flex flex-wrap gap-1.5 mb-2">
               {editFormData.metrics.map((metric, idx) => (
                 <span
                   key={idx}
-                  className="inline-flex items-center gap-1 text-xs bg-emerald-50 text-emerald-800 px-2 py-0.5 rounded-md border border-emerald-200 font-mono"
+                  className="inline-flex items-center gap-1 text-xs bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 px-2 py-0.5 rounded-md border border-emerald-200 dark:border-emerald-800 font-mono"
                 >
                   {metric}
                   <button
                     type="button"
                     onClick={() => removeMetricItem(idx)}
-                    className="text-emerald-500 hover:text-rose-600 rounded"
+                    className="text-emerald-500 dark:text-emerald-400 hover:text-rose-600 dark:hover:text-rose-400 rounded"
                   >
                     <X className="w-3 h-3" />
                   </button>
@@ -431,13 +431,13 @@ export function ProjectsSection({
                   }
                 }}
                 placeholder="e.g. Sub-850ms latency or 15,000+ jobs/sec..."
-                className="text-xs px-2.5 py-1.5 rounded-md border border-slate-300 focus:outline-none focus:border-emerald-600 w-80 bg-white"
+                className="text-xs px-2.5 py-1.5 rounded-md border border-slate-300 dark:border-zinc-700 focus:outline-none focus:border-emerald-600 w-80 bg-white dark:bg-[#18181B] text-slate-900 dark:text-zinc-100"
               />
               <button
                 type="button"
                 onClick={addMetricItem}
                 disabled={!metricInput.trim()}
-                className="px-2.5 py-1.5 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-md disabled:opacity-50"
+                className="px-2.5 py-1.5 text-xs bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 text-slate-700 dark:text-zinc-300 rounded-md disabled:opacity-50"
               >
                 Add metric
               </button>
@@ -448,10 +448,10 @@ export function ProjectsSection({
 
       {/* Projects List Cards */}
       {projects.length === 0 ? (
-        <div className="bg-white border border-slate-200 rounded-lg p-8 text-center">
-          <FolderGit2 className="w-8 h-8 text-slate-300 mx-auto mb-2" />
-          <h4 className="text-xs font-semibold text-slate-700 mb-1">No projects in vault</h4>
-          <p className="text-xs text-slate-500 max-w-sm mx-auto mb-4">
+        <div className="bg-white dark:bg-[#111114] border border-slate-200 dark:border-zinc-800 rounded-lg p-8 text-center">
+          <FolderGit2 className="w-8 h-8 text-slate-300 dark:text-zinc-600 mx-auto mb-2" />
+          <h4 className="text-xs font-semibold text-slate-700 dark:text-zinc-300 mb-1">No projects in vault</h4>
+          <p className="text-xs text-slate-500 dark:text-zinc-400 max-w-sm mx-auto mb-4">
             Use the 1-Click GitHub sync above to auto-import your repositories or add a project manually.
           </p>
         </div>
@@ -460,26 +460,26 @@ export function ProjectsSection({
           {projects.map((proj, idx) => (
             <div
               key={proj.id}
-              className="bg-white border border-slate-200 rounded-lg p-5 hover:border-slate-300 transition-colors"
+              className="bg-white dark:bg-[#111114] border border-slate-200 dark:border-zinc-800 rounded-lg p-5 hover:border-slate-300 dark:hover:border-zinc-700 transition-colors"
             >
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <h4 className="text-sm font-semibold text-slate-900 tracking-tight">
+                    <h4 className="text-sm font-semibold text-slate-900 dark:text-zinc-100 tracking-tight">
                       {proj.name}
                     </h4>
-                    <span className="text-xs font-mono text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded-md border border-slate-200">
+                    <span className="text-xs font-mono text-slate-500 dark:text-zinc-400 bg-slate-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded-md border border-slate-200 dark:border-zinc-700">
                       {proj.id}
                     </span>
                   </div>
 
                   {proj.tagline && (
-                    <p className="text-xs text-slate-600 mt-1 font-medium">
+                    <p className="text-xs text-slate-600 dark:text-zinc-300 mt-1 font-medium">
                       {proj.tagline}
                     </p>
                   )}
 
-                  <p className="text-xs text-slate-600 mt-2 leading-relaxed">
+                  <p className="text-xs text-slate-600 dark:text-zinc-400 mt-2 leading-relaxed">
                     {proj.description}
                   </p>
                 </div>
@@ -489,7 +489,7 @@ export function ProjectsSection({
                   <button
                     type="button"
                     onClick={() => startEdit(idx)}
-                    className="p-1.5 rounded-md text-slate-400 hover:text-slate-800 hover:bg-slate-100"
+                    className="p-1.5 rounded-md text-slate-400 dark:text-zinc-500 hover:text-slate-800 dark:hover:text-zinc-200 hover:bg-slate-100 dark:hover:bg-zinc-800"
                     title="Edit project"
                   >
                     <Edit2 className="w-3.5 h-3.5" />
@@ -497,7 +497,7 @@ export function ProjectsSection({
                   <button
                     type="button"
                     onClick={() => handleDelete(idx)}
-                    className="p-1.5 rounded-md text-slate-400 hover:text-rose-600 hover:bg-slate-100"
+                    className="p-1.5 rounded-md text-slate-400 dark:text-zinc-500 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-slate-100 dark:hover:bg-zinc-800"
                     title="Delete project"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
@@ -508,11 +508,11 @@ export function ProjectsSection({
               {/* Tech Stack Pills */}
               {proj.tech_stack.length > 0 && (
                 <div className="mt-3 flex items-center gap-1.5 flex-wrap">
-                  <Code className="w-3 h-3 text-slate-400 shrink-0" />
+                  <Code className="w-3 h-3 text-slate-400 dark:text-zinc-500 shrink-0" />
                   {proj.tech_stack.map((tech) => (
                     <span
                       key={tech}
-                      className="text-xs font-medium bg-slate-100 text-slate-700 px-2 py-0.5 rounded-md border border-slate-200"
+                      className="text-xs font-medium bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 px-2 py-0.5 rounded-md border border-slate-200 dark:border-zinc-700"
                     >
                       {tech}
                     </span>
@@ -522,10 +522,10 @@ export function ProjectsSection({
 
               {/* STAR Highlights */}
               {proj.highlights.length > 0 && (
-                <div className="mt-3 pt-3 border-t border-slate-100 space-y-1">
+                <div className="mt-3 pt-3 border-t border-slate-100 dark:border-zinc-800 space-y-1">
                   {proj.highlights.map((bullet, bIdx) => (
-                    <div key={bIdx} className="text-xs text-slate-600 flex items-start gap-2">
-                      <span className="text-emerald-600 font-bold">&bull;</span>
+                    <div key={bIdx} className="text-xs text-slate-600 dark:text-zinc-400 flex items-start gap-2">
+                      <span className="text-emerald-600 dark:text-emerald-500 font-bold">&bull;</span>
                       <span>{bullet}</span>
                     </div>
                   ))}
@@ -533,16 +533,16 @@ export function ProjectsSection({
               )}
 
               {/* Metrics & Links Footer */}
-              <div className="mt-4 pt-3 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="mt-4 pt-3 border-t border-slate-100 dark:border-zinc-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 {/* Metrics */}
                 <div className="flex items-center gap-1.5 flex-wrap">
                   {proj.metrics.length > 0 && (
                     <>
-                      <TrendingUp className="w-3 h-3 text-emerald-600 shrink-0" />
+                      <TrendingUp className="w-3 h-3 text-emerald-600 dark:text-emerald-500 shrink-0" />
                       {proj.metrics.map((m, mIdx) => (
                         <span
                           key={mIdx}
-                          className="text-xs font-mono text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200 tabular-nums"
+                          className="text-xs font-mono text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-md border border-emerald-200 dark:border-emerald-800 tabular-nums"
                         >
                           {m}
                         </span>
@@ -558,11 +558,11 @@ export function ProjectsSection({
                       href={proj.repo_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-slate-600 hover:text-slate-900 font-medium"
+                      className="inline-flex items-center gap-1 text-slate-600 dark:text-zinc-400 hover:text-slate-900 dark:hover:text-zinc-100 font-medium"
                     >
                       <Github className="w-3.5 h-3.5" />
                       <span>Code</span>
-                      <ExternalLink className="w-3 h-3 text-slate-400" />
+                      <ExternalLink className="w-3 h-3 text-slate-400 dark:text-zinc-500" />
                     </a>
                   )}
                   {proj.live_url && (
@@ -570,10 +570,10 @@ export function ProjectsSection({
                       href={proj.live_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-emerald-700 hover:text-emerald-800 font-medium"
+                      className="inline-flex items-center gap-1 text-emerald-700 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-300 font-medium"
                     >
                       <span>Live demo</span>
-                      <ExternalLink className="w-3 h-3 text-emerald-600" />
+                      <ExternalLink className="w-3 h-3 text-emerald-600 dark:text-emerald-500" />
                     </a>
                   )}
                 </div>

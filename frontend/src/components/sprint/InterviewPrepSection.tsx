@@ -60,17 +60,17 @@ export function InterviewPrepSection({ questions }: InterviewPrepSectionProps) {
   });
 
   return (
-    <div className="bg-white border border-slate-200 rounded-lg p-5">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+    <div className="bg-white dark:bg-[#111114] border border-slate-200 dark:border-zinc-800 rounded-lg p-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100 dark:border-zinc-800">
         <div>
-          <h3 className="text-sm font-semibold text-slate-900 flex items-center gap-2">
-            <HelpCircle className="w-4 h-4 text-emerald-600" />
+          <h3 className="text-sm font-semibold text-slate-900 dark:text-zinc-100 flex items-center gap-2">
+            <HelpCircle className="w-4 h-4 text-emerald-600 dark:text-emerald-500" />
             Targeted interview preparation
-            <span className="text-xs font-mono text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">
+            <span className="text-xs font-mono text-slate-500 dark:text-zinc-400 bg-slate-100 dark:bg-zinc-800 px-2 py-0.5 rounded-md">
               {questions.length} questions
             </span>
           </h3>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">
             Grounded directly in target JD expectations and candidate vault projects.
           </p>
         </div>
@@ -82,8 +82,8 @@ export function InterviewPrepSection({ questions }: InterviewPrepSectionProps) {
             onClick={() => setSelectedCategory("all")}
             className={`px-2.5 py-1 text-xs rounded-md font-medium transition-colors ${
               selectedCategory === "all"
-                ? "bg-slate-900 text-white"
-                : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                ? "bg-slate-900 dark:bg-zinc-100 text-white dark:text-zinc-900"
+                : "bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-zinc-300 hover:bg-slate-200 dark:hover:bg-zinc-700"
             }`}
           >
             All ({questions.length})
@@ -100,8 +100,8 @@ export function InterviewPrepSection({ questions }: InterviewPrepSectionProps) {
                 onClick={() => setSelectedCategory(cat)}
                 className={`px-2.5 py-1 text-xs rounded-md font-medium transition-colors ${
                   selectedCategory === cat
-                    ? "bg-slate-900 text-white"
-                    : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                    ? "bg-slate-900 dark:bg-zinc-100 text-white dark:text-zinc-900"
+                    : "bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-zinc-300 hover:bg-slate-200 dark:hover:bg-zinc-700"
                 }`}
               >
                 {config.label} ({count})
@@ -121,24 +121,24 @@ export function InterviewPrepSection({ questions }: InterviewPrepSectionProps) {
           return (
             <div
               key={idx}
-              className="border border-slate-200 rounded-md bg-white hover:border-slate-300 transition-colors"
+              className="border border-slate-200 dark:border-zinc-800 rounded-md bg-white dark:bg-[#111114] hover:border-slate-300 dark:hover:border-zinc-700 transition-colors"
             >
               <div
                 onClick={() => toggleExpand(idx)}
                 className="p-3.5 flex items-start justify-between gap-3 cursor-pointer select-none"
               >
                 <div className="flex items-start gap-2.5 flex-1">
-                  <span className="text-xs font-mono text-slate-400 mt-0.5 shrink-0">
+                  <span className="text-xs font-mono text-slate-400 dark:text-zinc-500 mt-0.5 shrink-0">
                     Q{idx + 1}
                   </span>
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="inline-flex items-center gap-1 text-xs font-mono px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 border border-slate-200">
-                        <Icon className="w-3 h-3 text-slate-500" />
+                      <span className="inline-flex items-center gap-1 text-xs font-mono px-2 py-0.5 rounded-md bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 border border-slate-200 dark:border-zinc-700">
+                        <Icon className="w-3 h-3 text-slate-500 dark:text-zinc-400" />
                         {config.label}
                       </span>
                     </div>
-                    <h4 className="text-xs font-semibold text-slate-900 leading-snug">
+                    <h4 className="text-xs font-semibold text-slate-900 dark:text-zinc-100 leading-snug">
                       {q.question}
                     </h4>
                   </div>
@@ -151,18 +151,18 @@ export function InterviewPrepSection({ questions }: InterviewPrepSectionProps) {
                       e.stopPropagation();
                       handleCopy(q, idx);
                     }}
-                    className="p-1 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-md transition-colors"
+                    className="p-1 text-slate-400 hover:text-slate-700 dark:hover:text-zinc-200 bg-slate-50 dark:bg-zinc-800 hover:bg-slate-100 dark:hover:bg-zinc-700 border border-slate-200 dark:border-zinc-700 rounded-md transition-colors"
                     title="Copy question and answer"
                   >
                     {copiedIndex === idx ? (
-                      <Check className="w-3.5 h-3.5 text-emerald-600" />
+                      <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-500" />
                     ) : (
                       <Copy className="w-3.5 h-3.5" />
                     )}
                   </button>
                   <button
                     type="button"
-                    className="p-1 text-slate-400 hover:text-slate-700 rounded-md"
+                    className="p-1 text-slate-400 hover:text-slate-700 dark:hover:text-zinc-200 rounded-md"
                   >
                     {isExpanded ? (
                       <ChevronUp className="w-3.5 h-3.5" />
@@ -174,19 +174,19 @@ export function InterviewPrepSection({ questions }: InterviewPrepSectionProps) {
               </div>
 
               {isExpanded && (
-                <div className="px-3.5 pb-4 pt-1 border-t border-slate-100 bg-slate-50/50 space-y-2.5 text-xs">
+                <div className="px-3.5 pb-4 pt-1 border-t border-slate-100 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-900/40 space-y-2.5 text-xs">
                   <div>
-                    <span className="font-semibold text-slate-700 block mb-0.5">
+                    <span className="font-semibold text-slate-700 dark:text-zinc-300 block mb-0.5">
                       Interviewer intent:
                     </span>
-                    <p className="text-slate-600 leading-relaxed">{q.why_asked}</p>
+                    <p className="text-slate-600 dark:text-zinc-400 leading-relaxed">{q.why_asked}</p>
                   </div>
 
-                  <div className="bg-white border border-slate-200 rounded-md p-3">
-                    <span className="font-semibold text-slate-800 block mb-1">
+                  <div className="bg-white dark:bg-[#18181B] border border-slate-200 dark:border-zinc-800 rounded-md p-3">
+                    <span className="font-semibold text-slate-800 dark:text-zinc-200 block mb-1">
                       Crisp answer guide:
                     </span>
-                    <p className="text-slate-700 font-mono leading-relaxed text-xs">
+                    <p className="text-slate-700 dark:text-zinc-300 font-mono leading-relaxed text-xs">
                       {q.crisp_answer_guide}
                     </p>
                   </div>

@@ -50,17 +50,17 @@ export function GitHubSyncBar({
   };
 
   return (
-    <div className="bg-white border border-slate-200 rounded-lg p-4 mb-6">
+    <div className="bg-white dark:bg-[#111114] border border-slate-200 dark:border-zinc-800 rounded-lg p-4 mb-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         {/* Left description */}
         <div>
           <div className="flex items-center gap-2">
-            <Github className="w-4 h-4 text-slate-800" />
-            <h3 className="text-xs font-semibold text-slate-900">
+            <Github className="w-4 h-4 text-slate-800 dark:text-zinc-200" />
+            <h3 className="text-xs font-semibold text-slate-900 dark:text-zinc-100">
               1-Click GitHub repository sync
             </h3>
           </div>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">
             Imports non-forked public repositories with verified tech stacks into your Master Truth Vault.
           </p>
         </div>
@@ -68,7 +68,7 @@ export function GitHubSyncBar({
         {/* Form */}
         <form onSubmit={handleSync} className="flex items-center gap-2 shrink-0">
           <div className="relative">
-            <span className="absolute left-2.5 top-2 text-xs text-slate-400 font-mono select-none">
+            <span className="absolute left-2.5 top-2 text-xs text-slate-400 dark:text-zinc-500 font-mono select-none">
               github.com/
             </span>
             <input
@@ -77,14 +77,14 @@ export function GitHubSyncBar({
               onChange={(e) => setUsername(e.target.value)}
               placeholder="username"
               disabled={isLoading}
-              className="text-xs pl-[86px] pr-3 py-1.5 rounded-md border border-slate-300 bg-white text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 font-mono w-48 sm:w-56"
+              className="text-xs pl-[86px] pr-3 py-1.5 rounded-md border border-slate-300 dark:border-zinc-700 bg-white dark:bg-[#18181B] text-slate-900 dark:text-zinc-100 placeholder:text-slate-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 font-mono w-48 sm:w-56"
             />
           </div>
 
           <button
             type="submit"
             disabled={isLoading || !username.trim()}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-slate-900 hover:bg-slate-800 text-white text-xs font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-slate-900 dark:bg-zinc-100 hover:bg-slate-800 dark:hover:bg-zinc-200 text-white dark:text-zinc-900 text-xs font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? (
               <>
@@ -106,14 +106,14 @@ export function GitHubSyncBar({
         <div
           className={`mt-3 px-3 py-2 rounded-md text-xs flex items-center gap-2 border ${
             message.type === "success"
-              ? "bg-emerald-50 text-emerald-800 border-emerald-200"
-              : "bg-rose-50 text-rose-800 border-rose-200"
+              ? "bg-emerald-50 dark:bg-emerald-950/30 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800"
+              : "bg-rose-50 dark:bg-rose-950/30 text-rose-800 dark:text-rose-300 border-rose-200 dark:border-rose-800"
           }`}
         >
           {message.type === "success" ? (
-            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
           ) : (
-            <AlertCircle className="w-3.5 h-3.5 text-rose-600 shrink-0" />
+            <AlertCircle className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400 shrink-0" />
           )}
           <span>{message.text}</span>
         </div>

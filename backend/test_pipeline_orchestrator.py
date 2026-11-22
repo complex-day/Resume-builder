@@ -259,6 +259,62 @@ def run_tests():
     assert tailor_resp.status_code == 200
     print("All regression checks passed successfully.\n")
 
+    # TEST 6: Accounts Officer JD Exclusion Test
+    print("[TEST 6] Testing Exclusion of Non-JD Skills for Accounts Officer JD:")
+    accounts_jd = DecodedJD(
+        role_title="Accounts Officer",
+        company_name="Finance Corp",
+        role_level="mid",
+        company_vibe="corporate",
+        detected_portal="custom",
+        must_have_skills=["Tally ERP", "GST", "TDS", "MS Office"],
+        nice_to_have_skills=["Auditing"],
+        ats_keywords=["Taxation", "Financial Accounting"],
+        key_responsibilities=["Maintain accounts", "File GST returns"],
+        eligibility_constraints=EligibilityConstraints(),
+    )
+    # Mock architect returning tech skills alongside one matching skill
+    mock_acct_tailored = tailored_resume.model_copy(deep=True)
+    mock_acct_tailored.matched_ats_keywords = ["Python", "SQL", "PostgreSQL", "Redis", "MS Office"]
+
+    acct_critique = ATSCritique(
+        score=75,
+        passed=False,
+        matched_keywords=["MS Office"],
+        missing_must_have_skills=["Tally ERP", "GST", "TDS"],
+        missing_ats_keywords=["Taxation", "Financial Accounting"],
+        actionable_feedback=[],
+        hallucination_flags=[],
+    )
+
+    jd_decoder.default_llm_override = accounts_jd
+    resume_architect.default_llm_override = mock_acct_tailored
+    ats_critic.default_llm_override = acct_critique
+
+    try:
+        acct_resp = client.post(
+            "/api/v1/pipeline/run",
+            json={
+                "vault": vault.model_dump(mode="json"),
+                "raw_jd_text": "Hiring an Accounts Officer with expertise in Tally ERP, GST, TDS, and MS Office.",
+            },
+        )
+        assert acct_resp.status_code == 200
+        acct_data = acct_resp.json()
+        returned_matched = acct_data["tailored_resume"]["matched_ats_keywords"]
+        critique_matched = acct_data["ats_critique"]["matched_keywords"]
+        print(f"  Returned matched_ats_keywords: {returned_matched}")
+        print(f"  Returned critique matched_keywords: {critique_matched}")
+        for non_jd in ["Python", "SQL", "PostgreSQL", "Redis"]:
+            assert non_jd not in returned_matched, f"False positive in tailored_resume: {non_jd}"
+            assert non_jd not in critique_matched, f"False positive in critique: {non_jd}"
+        assert "MS Office" in returned_matched
+        print("Accounts Officer JD non-JD skills successfully excluded.\n")
+    finally:
+        jd_decoder.default_llm_override = None
+        resume_architect.default_llm_override = None
+        ats_critic.default_llm_override = None
+
     print("=== ALL STEP 2 ORCHESTRATOR TESTS PASSED SUCCESSFULLY ===")
 
 

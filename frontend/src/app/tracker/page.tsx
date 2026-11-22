@@ -136,18 +136,18 @@ export default function TrackerPage() {
   return (
     <div className="flex-1 flex flex-col min-h-screen">
       {/* Header */}
-      <header className="sticky top-0 z-20 bg-white border-b border-slate-200 px-8 py-3.5 flex items-center justify-between">
+      <header className="sticky top-0 z-20 bg-white dark:bg-[#111114] border-b border-slate-200 dark:border-zinc-800 px-8 py-3.5 flex items-center justify-between transition-colors">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-base font-semibold text-slate-900 flex items-center gap-2">
-              <Kanban className="w-4 h-4 text-emerald-600" />
+            <h1 className="text-base font-semibold text-slate-900 dark:text-zinc-100 flex items-center gap-2">
+              <Kanban className="w-4 h-4 text-emerald-600 dark:text-emerald-500" />
               Application Tracker
             </h1>
-            <span className="text-xs text-slate-500 font-mono bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200">
+            <span className="text-xs text-slate-500 dark:text-zinc-400 font-mono bg-slate-100 dark:bg-zinc-800 px-2 py-0.5 rounded-md border border-slate-200 dark:border-zinc-700">
               user: {userId}
             </span>
           </div>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">
             Track tailored applications, update interview statuses, and monitor callback rates.
           </p>
         </div>
@@ -157,7 +157,7 @@ export default function TrackerPage() {
             type="button"
             onClick={loadTrackerData}
             disabled={isLoading}
-            className="p-1.5 text-slate-500 hover:text-slate-800 border border-slate-200 rounded-md hover:bg-slate-50 transition-colors"
+            className="p-1.5 text-slate-500 dark:text-zinc-400 hover:text-slate-800 dark:hover:text-zinc-200 border border-slate-200 dark:border-zinc-800 rounded-md hover:bg-slate-50 dark:hover:bg-zinc-800 transition-colors"
             title="Refresh application tracker"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? "animate-spin" : ""}`} />
@@ -179,15 +179,15 @@ export default function TrackerPage() {
       <div className="flex-1 max-w-7xl w-full mx-auto px-8 py-6">
         {/* Error banner */}
         {errorMessage && (
-          <div className="mb-4 bg-rose-50 border border-rose-200 text-rose-800 text-xs px-4 py-3 rounded-md flex items-center justify-between">
+          <div className="mb-4 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 text-rose-800 dark:text-rose-200 text-xs px-4 py-3 rounded-md flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />
+              <AlertTriangle className="w-4 h-4 text-rose-600 dark:text-rose-400 shrink-0" />
               <span>{errorMessage}</span>
             </div>
             <button
               type="button"
               onClick={() => setErrorMessage(null)}
-              className="text-rose-500 hover:text-rose-800 font-bold ml-2"
+              className="text-rose-500 hover:text-rose-800 dark:hover:text-rose-300 font-bold ml-2"
             >
               &times;
             </button>
@@ -196,8 +196,8 @@ export default function TrackerPage() {
 
         {/* Success toast */}
         {successMessage && (
-          <div className="mb-4 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs px-4 py-2.5 rounded-md flex items-center gap-2">
-            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+          <div className="mb-4 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/60 text-emerald-800 dark:text-emerald-200 text-xs px-4 py-2.5 rounded-md flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
             <span>{successMessage}</span>
           </div>
         )}
@@ -207,8 +207,8 @@ export default function TrackerPage() {
 
         {/* Applications Filter Bar & Table */}
         {isLoading && applications.length === 0 ? (
-          <div className="bg-white border border-slate-200 rounded-lg p-12 text-center text-xs text-slate-500 flex items-center justify-center gap-2">
-            <Loader2 className="w-4 h-4 animate-spin text-emerald-600" />
+          <div className="bg-white dark:bg-[#111114] border border-slate-200 dark:border-zinc-800 rounded-lg p-12 text-center text-xs text-slate-500 dark:text-zinc-400 flex items-center justify-center gap-2">
+            <Loader2 className="w-4 h-4 animate-spin text-emerald-600 dark:text-emerald-500" />
             <span>Loading applications from backend...</span>
           </div>
         ) : (

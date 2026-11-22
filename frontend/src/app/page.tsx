@@ -99,9 +99,9 @@ export default function VaultStudioPage() {
   if (isLoading) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center p-12">
-        <Loader2 className="w-5 h-5 animate-spin text-emerald-600 mb-3" />
-        <span className="text-xs font-medium text-slate-600">
-          Loading Master Truth Vault for <span className="font-mono text-slate-900">{userId}</span>...
+        <Loader2 className="w-5 h-5 animate-spin text-emerald-600 dark:text-emerald-500 mb-3" />
+        <span className="text-xs font-medium text-slate-600 dark:text-zinc-400">
+          Loading Master Truth Vault for <span className="font-mono text-slate-900 dark:text-zinc-100">{userId}</span>...
         </span>
       </div>
     );
@@ -110,19 +110,19 @@ export default function VaultStudioPage() {
   if (!vault) {
     return (
       <div className="p-8 max-w-4xl mx-auto">
-        <div className="bg-rose-50 border border-rose-200 rounded-lg p-6 text-rose-800">
+        <div className="bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 rounded-lg p-6 text-rose-800 dark:text-rose-200">
           <div className="flex items-center gap-2 font-semibold text-sm mb-2">
-            <AlertTriangle className="w-4 h-4 text-rose-600" />
+            <AlertTriangle className="w-4 h-4 text-rose-600 dark:text-rose-400" />
             Backend Connection Blocked
           </div>
           <p className="text-xs leading-relaxed mb-4">
-            Could not retrieve data from <code className="font-mono bg-rose-100 px-1 py-0.5 rounded">http://127.0.0.1:8000</code>.
+            Could not retrieve data from <code className="font-mono bg-rose-100 dark:bg-rose-900/60 px-1 py-0.5 rounded">http://127.0.0.1:8000</code>.
             Ensure the FastAPI server is running.
           </p>
           <button
             type="button"
             onClick={loadVault}
-            className="text-xs font-medium bg-rose-800 text-white px-3 py-1.5 rounded-md hover:bg-rose-900"
+            className="text-xs font-medium bg-rose-800 hover:bg-rose-900 text-white px-3 py-1.5 rounded-md"
           >
             Retry Connection
           </button>
@@ -175,15 +175,15 @@ export default function VaultStudioPage() {
       <div className="flex-1 max-w-6xl w-full mx-auto px-8 py-6">
         {/* Alerts / Banners */}
         {errorMessage && (
-          <div className="mb-4 bg-rose-50 border border-rose-200 text-rose-800 text-xs px-4 py-3 rounded-md flex items-center justify-between">
+          <div className="mb-4 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 text-rose-800 dark:text-rose-200 text-xs px-4 py-3 rounded-md flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />
+              <AlertTriangle className="w-4 h-4 text-rose-600 dark:text-rose-400 shrink-0" />
               <span>{errorMessage}</span>
             </div>
             <button
               type="button"
               onClick={() => setErrorMessage(null)}
-              className="text-rose-500 hover:text-rose-800 font-bold ml-2"
+              className="text-rose-500 hover:text-rose-800 dark:hover:text-rose-300 font-bold ml-2"
             >
               &times;
             </button>
@@ -191,14 +191,14 @@ export default function VaultStudioPage() {
         )}
 
         {successNotice && (
-          <div className="mb-4 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs px-4 py-3 rounded-md flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+          <div className="mb-4 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/60 text-emerald-800 dark:text-emerald-200 text-xs px-4 py-3 rounded-md flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
             <span>{successNotice}</span>
           </div>
         )}
 
         {/* Clean Section Tabs */}
-        <div className="border-b border-slate-200 mb-6">
+        <div className="border-b border-slate-200 dark:border-zinc-800 mb-6">
           <nav className="flex space-x-6" aria-label="Tabs">
             {tabs.map((tab) => {
               const Icon = tab.icon;
@@ -209,13 +209,13 @@ export default function VaultStudioPage() {
                   onClick={() => setActiveTab(tab.id)}
                   className={`group inline-flex items-center gap-2 py-3 px-1 border-b-2 text-xs font-medium transition-colors ${
                     isActive
-                      ? "border-emerald-600 text-slate-900"
-                      : "border-transparent text-slate-500 hover:text-slate-800 hover:border-slate-300"
+                      ? "border-emerald-600 text-slate-900 dark:text-zinc-100"
+                      : "border-transparent text-slate-500 dark:text-zinc-400 hover:text-slate-800 dark:hover:text-zinc-200 hover:border-slate-300 dark:hover:border-zinc-700"
                   }`}
                 >
                   <Icon
                     className={`w-4 h-4 transition-colors ${
-                      isActive ? "text-emerald-600" : "text-slate-400 group-hover:text-slate-600"
+                      isActive ? "text-emerald-600 dark:text-emerald-500" : "text-slate-400 dark:text-zinc-500 group-hover:text-slate-600 dark:group-hover:text-zinc-300"
                     }`}
                   />
                   <span>{tab.label}</span>
@@ -223,8 +223,8 @@ export default function VaultStudioPage() {
                     <span
                       className={`text-[11px] font-mono font-medium px-1.5 py-0.5 rounded-md tabular-nums ${
                         isActive
-                          ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                          : "bg-slate-100 text-slate-600 border border-slate-200"
+                          ? "bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800"
+                          : "bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-zinc-400 border border-slate-200 dark:border-zinc-700"
                       }`}
                     >
                       {tab.count}

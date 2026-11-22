@@ -63,13 +63,13 @@ export function JobInputColumn({
   };
 
   return (
-    <div className="bg-white border border-slate-200 rounded-lg p-6 space-y-5">
-      <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+    <div className="bg-white dark:bg-[#111114] border border-slate-200 dark:border-zinc-800 rounded-lg p-6 space-y-5 transition-colors">
+      <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-zinc-800">
         <div>
-          <h2 className="text-sm font-semibold text-slate-900 flex items-center gap-2">
-            <FileText className="w-4 h-4 text-emerald-600" /> Target job description
+          <h2 className="text-sm font-semibold text-slate-900 dark:text-zinc-100 flex items-center gap-2">
+            <FileText className="w-4 h-4 text-emerald-600 dark:text-emerald-500" /> Target job description
           </h2>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">
             Paste target role details to trigger 3-agent ATS alignment.
           </p>
         </div>
@@ -78,10 +78,10 @@ export function JobInputColumn({
           type="button"
           onClick={handleLoadSample}
           disabled={isLoading}
-          className="text-xs text-slate-600 hover:text-slate-900 font-medium px-2.5 py-1 rounded-md border border-slate-200 hover:bg-slate-50 transition-colors flex items-center gap-1.5 whitespace-nowrap shrink-0"
+          className="text-xs text-slate-600 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-zinc-100 font-medium px-2.5 py-1 rounded-md border border-slate-200 dark:border-zinc-800 hover:bg-slate-50 dark:hover:bg-zinc-800/70 transition-colors flex items-center gap-1.5 whitespace-nowrap shrink-0"
           title="Fill sample job description for instant testing"
         >
-          <Sparkles className="w-3.5 h-3.5 text-slate-500" />
+          <Sparkles className="w-3.5 h-3.5 text-slate-500 dark:text-zinc-400" />
           Load sample JD
         </button>
       </div>
@@ -90,39 +90,39 @@ export function JobInputColumn({
         {/* Portal Archetype Selector */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-medium text-slate-700 mb-1">
+            <label className="block text-xs font-medium text-slate-700 dark:text-zinc-300 mb-1">
               Target portal type
             </label>
             <select
               value={selectedPortal}
               onChange={(e) => onPortalChange(e.target.value)}
               disabled={isLoading}
-              className="w-full text-xs px-2.5 py-1.5 rounded-md border border-slate-300 bg-white text-slate-800 focus:outline-none focus:border-emerald-600"
+              className="w-full text-xs px-2.5 py-1.5 rounded-md border border-slate-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-slate-800 dark:text-zinc-200 focus:outline-none focus:border-emerald-600 dark:focus:border-emerald-500"
             >
-              <option value="general">General / Auto-Detect</option>
-              <option value="internshala">Internshala</option>
-              <option value="unstop">Unstop</option>
-              <option value="linkedin">LinkedIn</option>
-              <option value="wellfound">Wellfound (AngelList)</option>
-              <option value="cutshort">YC / Cutshort</option>
-              <option value="pmis">PMIS / AICTE / NATS / NCS</option>
+              <option value="general" className="dark:bg-zinc-900">General / Auto-Detect</option>
+              <option value="internshala" className="dark:bg-zinc-900">Internshala</option>
+              <option value="unstop" className="dark:bg-zinc-900">Unstop</option>
+              <option value="linkedin" className="dark:bg-zinc-900">LinkedIn</option>
+              <option value="wellfound" className="dark:bg-zinc-900">Wellfound (AngelList)</option>
+              <option value="cutshort" className="dark:bg-zinc-900">YC / Cutshort</option>
+              <option value="pmis" className="dark:bg-zinc-900">PMIS / AICTE / NATS / NCS</option>
             </select>
           </div>
 
           {/* Source URL (optional) */}
           <div>
-            <label className="block text-xs font-medium text-slate-700 mb-1">
+            <label className="block text-xs font-medium text-slate-700 dark:text-zinc-300 mb-1">
               Source URL (optional)
             </label>
             <div className="relative">
-              <Globe className="w-3.5 h-3.5 absolute left-2.5 top-2 text-slate-400" />
+              <Globe className="w-3.5 h-3.5 absolute left-2.5 top-2 text-slate-400 dark:text-zinc-500" />
               <input
                 type="url"
                 value={sourceUrl}
                 onChange={(e) => onUrlChange(e.target.value)}
                 placeholder="https://internshala.com/job/..."
                 disabled={isLoading}
-                className="w-full text-xs pl-8 pr-2.5 py-1.5 rounded-md border border-slate-300 bg-white font-mono text-[11px] focus:outline-none focus:border-emerald-600"
+                className="w-full text-xs pl-8 pr-2.5 py-1.5 rounded-md border border-slate-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-slate-900 dark:text-zinc-100 font-mono text-[11px] focus:outline-none focus:border-emerald-600 dark:focus:border-emerald-500"
               />
             </div>
           </div>
@@ -131,12 +131,12 @@ export function JobInputColumn({
         {/* Large Clean JD Textarea with Live Character Counter */}
         <div>
           <div className="flex items-center justify-between mb-1">
-            <label className="block text-xs font-medium text-slate-700">
+            <label className="block text-xs font-medium text-slate-700 dark:text-zinc-300">
               Raw job description <span className="text-rose-500">*</span>
             </label>
             <span
               className={`text-xs font-mono tabular-nums ${
-                isJdValid ? "text-emerald-700" : "text-slate-400"
+                isJdValid ? "text-emerald-700 dark:text-emerald-400" : "text-slate-400 dark:text-zinc-500"
               }`}
             >
               {charCount} / 50 min chars
@@ -149,7 +149,7 @@ export function JobInputColumn({
             onChange={(e) => onJdChange(e.target.value)}
             disabled={isLoading}
             placeholder="Paste complete job description, requirements, responsibilities, and qualifications..."
-            className="w-full text-xs p-3 rounded-md border border-slate-300 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 bg-white font-sans leading-relaxed text-slate-800"
+            className="w-full text-xs p-3 rounded-md border border-slate-300 dark:border-zinc-700 focus:outline-none focus:border-emerald-600 dark:focus:border-emerald-500 bg-slate-50/50 dark:bg-zinc-900/60 font-sans leading-relaxed text-slate-800 dark:text-zinc-200"
           />
         </div>
 
@@ -158,16 +158,16 @@ export function JobInputColumn({
           <button
             type="button"
             onClick={() => setShowEligibilityOptions(!showEligibilityOptions)}
-            className="text-xs text-slate-500 hover:text-slate-800 font-medium flex items-center gap-1"
+            className="text-xs text-slate-500 dark:text-zinc-400 hover:text-slate-800 dark:hover:text-zinc-200 font-medium flex items-center gap-1"
           >
-            <User className="w-3 h-3 text-slate-400" />
+            <User className="w-3 h-3 text-slate-400 dark:text-zinc-500" />
             <span>{showEligibilityOptions ? "Hide portal filters" : "Set portal filter parameters (Age / Domicile)"}</span>
           </button>
 
           {showEligibilityOptions && (
-            <div className="mt-2 p-3 bg-slate-50 rounded-md border border-slate-200 grid grid-cols-2 gap-3">
+            <div className="mt-2 p-3 bg-slate-50 dark:bg-zinc-900/50 rounded-md border border-slate-200 dark:border-zinc-800 grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-medium text-slate-600 mb-1">
+                <label className="block text-xs font-medium text-slate-600 dark:text-zinc-400 mb-1">
                   Candidate age
                 </label>
                 <input
@@ -177,11 +177,11 @@ export function JobInputColumn({
                   placeholder="22"
                   min={16}
                   max={65}
-                  className="w-full text-xs px-2.5 py-1.5 rounded-md border border-slate-300 bg-white font-mono tabular-nums focus:outline-none focus:border-emerald-600"
+                  className="w-full text-xs px-2.5 py-1.5 rounded-md border border-slate-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-slate-900 dark:text-zinc-100 font-mono tabular-nums focus:outline-none focus:border-emerald-600 dark:focus:border-emerald-500"
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-slate-600 mb-1">
+                <label className="block text-xs font-medium text-slate-600 dark:text-zinc-400 mb-1">
                   Candidate domicile / state
                 </label>
                 <input
@@ -189,7 +189,7 @@ export function JobInputColumn({
                   value={candidateDomicile}
                   onChange={(e) => onDomicileChange(e.target.value)}
                   placeholder="e.g. Karnataka"
-                  className="w-full text-xs px-2.5 py-1.5 rounded-md border border-slate-300 bg-white focus:outline-none focus:border-emerald-600"
+                  className="w-full text-xs px-2.5 py-1.5 rounded-md border border-slate-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-slate-900 dark:text-zinc-100 focus:outline-none focus:border-emerald-600 dark:focus:border-emerald-500"
                 />
               </div>
             </div>
@@ -216,7 +216,7 @@ export function JobInputColumn({
             )}
           </button>
           {!isJdValid && charCount > 0 && (
-            <p className="text-xs text-amber-700 mt-1.5 text-center">
+            <p className="text-xs text-amber-700 dark:text-amber-400 mt-1.5 text-center">
               Please enter at least 50 characters of job description text.
             </p>
           )}

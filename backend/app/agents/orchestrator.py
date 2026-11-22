@@ -67,7 +67,22 @@ async def critic_node(state: ResumePipelineState) -> Dict[str, Any]:
         tailored=state["tailored_resume"],
         llm_override=state.get("critic_override"),
     )
+
+    # Deterministically intersect tailored_resume.matched_ats_keywords with ats_critique.matched_keywords
+    # so Agent 2 can never report non-JD skills as "matched ATS keywords"
+    tailored = state["tailored_resume"].model_copy(deep=True)
+    critique_matched_lower = {k.strip().lower(): k for k in critique.matched_keywords}
+    filtered_keywords: List[str] = [
+        k for k in tailored.matched_ats_keywords
+        if k.strip().lower() in critique_matched_lower
+    ]
+    for kw in critique.matched_keywords:
+        if not any(k.strip().lower() == kw.strip().lower() for k in filtered_keywords):
+            filtered_keywords.append(kw)
+    tailored.matched_ats_keywords = filtered_keywords
+
     return {
+        "tailored_resume": tailored,
         "ats_critique": critique,
         "critic_feedback": critique.actionable_feedback,
     }
@@ -140,10 +155,22 @@ async def run_resume_pipeline(
 
     critique = final_state["ats_critique"]
     status = "passed" if critique.passed else "best_effort_after_max_retries"
+    tailored = final_state["tailored_resume"].model_copy(deep=True)
+
+    # Deterministically intersect tailored_resume.matched_ats_keywords with ats_critique.matched_keywords
+    critique_matched_lower = {k.strip().lower(): k for k in critique.matched_keywords}
+    filtered_keywords = [
+        k for k in tailored.matched_ats_keywords
+        if k.strip().lower() in critique_matched_lower
+    ]
+    for kw in critique.matched_keywords:
+        if not any(k.strip().lower() == kw.strip().lower() for k in filtered_keywords):
+            filtered_keywords.append(kw)
+    tailored.matched_ats_keywords = filtered_keywords
 
     return PipelineRunResponse(
         decoded_jd=final_state["decoded_jd"],
-        tailored_resume=final_state["tailored_resume"],
+        tailored_resume=tailored,
         ats_critique=critique,
         attempts=final_state.get("attempts", 1),
         status=status,

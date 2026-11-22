@@ -157,6 +157,39 @@ def run_tests():
         assert decode_resp.json()["role_title"] == "Backend Engineering Intern"
         print("All regression checks passed successfully.\n")
 
+        # 5. Test Non-JD Skill Exclusion for Accounts Officer JD
+        print("[TEST 5] Testing Non-JD Skill Exclusion for Accounts Officer JD:")
+        accounts_jd = DecodedJD(
+            role_title="Accounts Officer",
+            company_name="Finance Corp",
+            role_level="mid",
+            company_vibe="corporate",
+            detected_portal="custom",
+            must_have_skills=["Tally ERP", "GST", "TDS", "MS Office"],
+            nice_to_have_skills=["Auditing"],
+            ats_keywords=["Taxation", "Financial Accounting"],
+            key_responsibilities=["Maintain accounts", "File GST returns"],
+            eligibility_constraints=EligibilityConstraints()
+        )
+        # Mock architect returning tech skills alongside one matching skill
+        mock_accounts_tailored = mock_valid_tailored.model_copy(deep=True)
+        mock_accounts_tailored.matched_ats_keywords = ["Python", "SQL", "PostgreSQL", "Redis", "MS Office"]
+        resume_architect.default_llm_override = mock_accounts_tailored
+
+        acct_payload = {
+            "vault": sample_vault_data,
+            "decoded_jd": accounts_jd.model_dump(),
+            "critic_feedback": []
+        }
+        acct_resp = client.post("/api/v1/pipeline/tailor-resume", json=acct_payload)
+        assert acct_resp.status_code == 200
+        acct_data = acct_resp.json()
+        print(f"  Returned matched_ats_keywords: {acct_data['matched_ats_keywords']}")
+        for non_jd_skill in ["Python", "SQL", "PostgreSQL", "Redis"]:
+            assert non_jd_skill not in acct_data["matched_ats_keywords"], f"False positive: {non_jd_skill} should not be in matched_ats_keywords"
+        assert "MS Office" in acct_data["matched_ats_keywords"]
+        print("Non-JD skills strictly excluded from matched_ats_keywords.\n")
+
         print("=== ALL AGENT 2 (RESUME ARCHITECT) TESTS PASSED SUCCESSFULLY ===")
 
     finally:

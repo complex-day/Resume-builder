@@ -46,13 +46,18 @@ def sanitize_ats_text(text: str) -> str:
     return clean
 
 
-def verify_vault_grounding(tailored: TailoredResume, vault: MasterTruthVault) -> TailoredResume:
+def verify_vault_grounding(
+    tailored: TailoredResume,
+    vault: MasterTruthVault,
+    decoded_jd: Optional[DecodedJD] = None,
+) -> TailoredResume:
     """Enforce strict grounding against the Master Truth Vault.
 
     Verifies:
     1. Every selected_project_id exists in the vault.
     2. Every TailoredProject.source_project_id exists in the vault.
     3. All text fields and bullets are sanitized of ATS-breaking characters.
+    4. Guards matched_ats_keywords against hallucinated non-JD skills.
     """
     valid_vault_ids = {p.id.strip().lower(): p for p in vault.projects}
 
@@ -86,6 +91,22 @@ def verify_vault_grounding(tailored: TailoredResume, vault: MasterTruthVault) ->
         cat.skills = [s for s in cat.skills if not (s.strip().lower() == "java" and "java" not in vault_known_lower)]
     for proj in tailored.projects:
         proj.tech_stack = [t for t in proj.tech_stack if not (t.strip().lower() == "java" and "java" not in vault_known_lower)]
+
+    # Guard against reporting non-JD skills as matched_ats_keywords
+    if decoded_jd is not None:
+        valid_jd_keywords = {
+            k.strip().lower()
+            for k in (
+                decoded_jd.must_have_skills
+                + decoded_jd.nice_to_have_skills
+                + decoded_jd.ats_keywords
+            )
+        }
+        if valid_jd_keywords:
+            tailored.matched_ats_keywords = [
+                k for k in tailored.matched_ats_keywords
+                if k.strip().lower() in valid_jd_keywords
+            ]
 
     return tailored
 
@@ -180,4 +201,4 @@ async def build_tailored_resume(
             tailored = TailoredResume.model_validate(tailored)
 
     # Strictly verify vault grounding and sanitize ATS text
-    return verify_vault_grounding(tailored, vault)
+    return verify_vault_grounding(tailored, vault, decoded_jd)

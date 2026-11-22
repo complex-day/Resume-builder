@@ -6,7 +6,7 @@ import {
   ApplicationStatus,
   ResumeStyleTag,
 } from "@/types/tracker";
-import { X, Loader2, Plus, Briefcase } from "lucide-react";
+import { X, Briefcase, Loader2, Plus } from "lucide-react";
 
 interface LogApplicationModalProps {
   userId: string;
@@ -17,34 +17,38 @@ interface LogApplicationModalProps {
 }
 
 const PORTAL_CHOICES = [
-  { value: "linkedin", label: "LinkedIn" },
-  { value: "internshala", label: "Internshala" },
-  { value: "wellfound", label: "Wellfound (AngelList)" },
-  { value: "unstop", label: "Unstop" },
-  { value: "naukri", label: "Naukri.com" },
-  { value: "indeed", label: "Indeed" },
-  { value: "instahyre", label: "Instahyre" },
-  { value: "cutshort", label: "Cutshort" },
-  { value: "ycombinator", label: "Work at a Startup (YC)" },
-  { value: "pmis", label: "PMIS / AICTE Portal" },
-  { value: "nats", label: "NATS Apprentice Portal" },
-  { value: "ncs", label: "National Career Service (NCS)" },
-  { value: "glassdoor", label: "Glassdoor" },
-  { value: "hirist", label: "Hirist" },
-  { value: "foundit", label: "Foundit (Monster)" },
-  { value: "google_careers", label: "Google Careers" },
-  { value: "amazon_jobs", label: "Amazon Jobs" },
-  { value: "tcs_ion", label: "TCS iON / NextStep" },
-  { value: "direct_portal", label: "Direct Company Careers Page" },
-  { value: "other", label: "Other Portal" },
+  "linkedin",
+  "internshala",
+  "wellfound",
+  "naukri",
+  "unstop",
+  "cutshort",
+  "indeed",
+  "foundit",
+  "hirist",
+  "instahyre",
+  "turing",
+  "upwork",
+  "freelancer",
+  "yc_waas",
+  "aicte",
+  "pmis",
+  "nats",
+  "ncs",
+  "google_careers",
+  "greenhouse",
+  "lever",
+  "workday",
+  "company_careers",
+  "other",
 ];
 
 const STYLE_CHOICES: { value: ResumeStyleTag; label: string }[] = [
-  { value: "metrics_heavy", label: "Metrics Heavy (High Quantified Impact)" },
-  { value: "project_first", label: "Project First (Hands-on Repos)" },
-  { value: "skills_first", label: "Skills First (Keyword Clustered)" },
-  { value: "concise_startup", label: "Concise Startup (1-Page Punchy)" },
-  { value: "formal_govt", label: "Formal Govt (PMIS/AICTE/PSU)" },
+  { value: "metrics_heavy", label: "Metrics-heavy (Quantified impact)" },
+  { value: "project_first", label: "Project-first (Architectural depth)" },
+  { value: "skills_first", label: "Skills-first (Technical stack emphasis)" },
+  { value: "concise_startup", label: "Concise startup (High-pace execution)" },
+  { value: "formal_govt", label: "Formal Govt / PMIS (Mandatory compliance)" },
 ];
 
 export function LogApplicationModal({
@@ -100,27 +104,27 @@ export function LogApplicationModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
-      <div className="bg-white border border-slate-200 rounded-lg max-w-lg w-full p-6 shadow-xl relative animate-in fade-in duration-150">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 dark:bg-black/60">
+      <div className="bg-white dark:bg-[#111114] border border-slate-200 dark:border-zinc-800 rounded-lg max-w-lg w-full p-6 shadow-xl relative animate-in fade-in duration-150 transition-colors">
         {/* Modal Header */}
-        <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+        <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-zinc-800 mb-4">
           <div className="flex items-center gap-2">
-            <Briefcase className="w-4 h-4 text-emerald-600" />
-            <h3 className="text-sm font-semibold text-slate-900">
+            <Briefcase className="w-4 h-4 text-emerald-600 dark:text-emerald-500" />
+            <h3 className="text-sm font-semibold text-slate-900 dark:text-zinc-100">
               Log tailored application
             </h3>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-700 p-1 rounded-md hover:bg-slate-100"
+            className="text-slate-400 dark:text-zinc-500 hover:text-slate-700 dark:hover:text-zinc-200 p-1 rounded-md hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {errorMsg && (
-          <div className="mb-4 text-xs bg-rose-50 border border-rose-200 text-rose-800 p-2.5 rounded-md">
+          <div className="mb-4 text-xs bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 text-rose-800 dark:text-rose-200 p-2.5 rounded-md">
             {errorMsg}
           </div>
         )}
@@ -129,75 +133,78 @@ export function LogApplicationModal({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {/* Company Name */}
             <div>
-              <label className="block text-xs font-medium text-slate-700 mb-1">
+              <label className="block text-xs font-medium text-slate-700 dark:text-zinc-300 mb-1">
                 Company name <span className="text-rose-500">*</span>
               </label>
               <input
                 type="text"
+                required
                 value={companyName}
                 onChange={(e) => setCompanyName(e.target.value)}
-                placeholder="e.g. Swiggy"
-                required
-                className="w-full text-xs px-3 py-1.5 rounded-md border border-slate-300 focus:outline-none focus:border-emerald-600 bg-white"
-                autoFocus
+                placeholder="e.g. Razorpay, Stripe, CRED"
+                className="w-full text-xs px-3 py-1.5 rounded-md border border-slate-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-slate-900 dark:text-zinc-100 placeholder:text-slate-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-emerald-600 dark:focus:border-emerald-500"
               />
             </div>
 
             {/* Role Title */}
             <div>
-              <label className="block text-xs font-medium text-slate-700 mb-1">
+              <label className="block text-xs font-medium text-slate-700 dark:text-zinc-300 mb-1">
                 Role title <span className="text-rose-500">*</span>
               </label>
               <input
                 type="text"
+                required
                 value={roleTitle}
                 onChange={(e) => setRoleTitle(e.target.value)}
-                placeholder="e.g. Backend Engineer"
-                required
-                className="w-full text-xs px-3 py-1.5 rounded-md border border-slate-300 focus:outline-none focus:border-emerald-600 bg-white"
+                placeholder="e.g. Backend Software Engineer"
+                className="w-full text-xs px-3 py-1.5 rounded-md border border-slate-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-slate-900 dark:text-zinc-100 placeholder:text-slate-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-emerald-600 dark:focus:border-emerald-500"
               />
             </div>
+          </div>
 
-            {/* Portal */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {/* Job Portal */}
             <div>
-              <label className="block text-xs font-medium text-slate-700 mb-1">
-                Job portal
+              <label className="block text-xs font-medium text-slate-700 dark:text-zinc-300 mb-1">
+                Detected / target portal
               </label>
               <select
                 value={detectedPortal}
                 onChange={(e) => setDetectedPortal(e.target.value)}
-                className="w-full text-xs px-2.5 py-1.5 rounded-md border border-slate-300 bg-white text-slate-800 focus:outline-none focus:border-emerald-600"
+                className="w-full text-xs px-2.5 py-1.5 rounded-md border border-slate-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-slate-800 dark:text-zinc-200 focus:outline-none focus:border-emerald-600 dark:focus:border-emerald-500"
               >
                 {PORTAL_CHOICES.map((p) => (
-                  <option key={p.value} value={p.value}>
-                    {p.label}
+                  <option key={p} value={p} className="dark:bg-zinc-900">
+                    {p}
                   </option>
                 ))}
               </select>
             </div>
 
-            {/* Status */}
+            {/* Application Status */}
             <div>
-              <label className="block text-xs font-medium text-slate-700 mb-1">
-                Lifecycle status
+              <label className="block text-xs font-medium text-slate-700 dark:text-zinc-300 mb-1">
+                Initial status
               </label>
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value as ApplicationStatus)}
-                className="w-full text-xs px-2.5 py-1.5 rounded-md border border-slate-300 bg-white text-slate-800 focus:outline-none focus:border-emerald-600"
+                className="w-full text-xs px-2.5 py-1.5 rounded-md border border-slate-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-slate-800 dark:text-zinc-200 focus:outline-none focus:border-emerald-600 dark:focus:border-emerald-500"
               >
-                <option value="applied">Applied</option>
-                <option value="shortlisted">Shortlisted</option>
-                <option value="interview">Interview</option>
-                <option value="offer">Offer</option>
-                <option value="rejected">Rejected</option>
-                <option value="saved">Saved (Draft)</option>
+                <option value="applied" className="dark:bg-zinc-900">Applied</option>
+                <option value="shortlisted" className="dark:bg-zinc-900">Shortlisted</option>
+                <option value="interview" className="dark:bg-zinc-900">Interview</option>
+                <option value="offer" className="dark:bg-zinc-900">Offer</option>
+                <option value="rejected" className="dark:bg-zinc-900">Rejected</option>
+                <option value="saved" className="dark:bg-zinc-900">Saved</option>
               </select>
             </div>
+          </div>
 
-            {/* ATS Match Score */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {/* ATS Score */}
             <div>
-              <label className="block text-xs font-medium text-slate-700 mb-1">
+              <label className="block text-xs font-medium text-slate-700 dark:text-zinc-300 mb-1">
                 ATS match score (0-100)
               </label>
               <input
@@ -206,22 +213,22 @@ export function LogApplicationModal({
                 max={100}
                 value={atsScore}
                 onChange={(e) => setAtsScore(Number(e.target.value))}
-                className="w-full text-xs px-3 py-1.5 rounded-md border border-slate-300 bg-white font-mono tabular-nums focus:outline-none focus:border-emerald-600"
+                className="w-full text-xs px-3 py-1.5 rounded-md border border-slate-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-slate-900 dark:text-zinc-100 font-mono tabular-nums focus:outline-none focus:border-emerald-600 dark:focus:border-emerald-500"
               />
             </div>
 
             {/* Resume Style Tag */}
             <div>
-              <label className="block text-xs font-medium text-slate-700 mb-1">
+              <label className="block text-xs font-medium text-slate-700 dark:text-zinc-300 mb-1">
                 Resume synthesis style
               </label>
               <select
                 value={styleTag}
                 onChange={(e) => setStyleTag(e.target.value as ResumeStyleTag)}
-                className="w-full text-xs px-2.5 py-1.5 rounded-md border border-slate-300 bg-white text-slate-800 focus:outline-none focus:border-emerald-600"
+                className="w-full text-xs px-2.5 py-1.5 rounded-md border border-slate-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-slate-800 dark:text-zinc-200 focus:outline-none focus:border-emerald-600 dark:focus:border-emerald-500"
               >
                 {STYLE_CHOICES.map((s) => (
-                  <option key={s.value} value={s.value}>
+                  <option key={s.value} value={s.value} className="dark:bg-zinc-900">
                     {s.label}
                   </option>
                 ))}
@@ -231,7 +238,7 @@ export function LogApplicationModal({
 
           {/* Source URL */}
           <div>
-            <label className="block text-xs font-medium text-slate-700 mb-1">
+            <label className="block text-xs font-medium text-slate-700 dark:text-zinc-300 mb-1">
               Job posting URL (optional)
             </label>
             <input
@@ -239,13 +246,13 @@ export function LogApplicationModal({
               value={sourceUrl}
               onChange={(e) => setSourceUrl(e.target.value)}
               placeholder="https://company.com/jobs/..."
-              className="w-full text-xs px-3 py-1.5 rounded-md border border-slate-300 bg-white font-mono text-[11px] focus:outline-none focus:border-emerald-600"
+              className="w-full text-xs px-3 py-1.5 rounded-md border border-slate-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-slate-900 dark:text-zinc-100 font-mono text-[11px] placeholder:text-slate-400 dark:placeholder:text-zinc-500 focus:outline-none focus:border-emerald-600 dark:focus:border-emerald-500"
             />
           </div>
 
           {/* Notes */}
           <div>
-            <label className="block text-xs font-medium text-slate-700 mb-1">
+            <label className="block text-xs font-medium text-slate-700 dark:text-zinc-300 mb-1">
               Notes (optional)
             </label>
             <textarea
@@ -253,17 +260,17 @@ export function LogApplicationModal({
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="e.g. Recruiter contact, interview round dates, referral details..."
-              className="w-full text-xs p-2.5 rounded-md border border-slate-300 focus:outline-none focus:border-emerald-600 bg-white"
+              className="w-full text-xs p-2.5 rounded-md border border-slate-300 dark:border-zinc-700 focus:outline-none focus:border-emerald-600 dark:focus:border-emerald-500 bg-white dark:bg-zinc-900 text-slate-800 dark:text-zinc-200 placeholder:text-slate-400 dark:placeholder:text-zinc-500"
             />
           </div>
 
           {/* Buttons */}
-          <div className="pt-2 border-t border-slate-100 flex items-center justify-end gap-2">
+          <div className="pt-2 border-t border-slate-100 dark:border-zinc-800 flex items-center justify-end gap-2">
             <button
               type="button"
               onClick={onClose}
               disabled={isSaving}
-              className="px-3 py-1.5 text-xs text-slate-600 hover:text-slate-800 rounded-md"
+              className="px-3 py-1.5 text-xs text-slate-600 dark:text-zinc-400 hover:text-slate-800 dark:hover:text-zinc-200 rounded-md transition-colors"
             >
               Cancel
             </button>
